@@ -31,6 +31,11 @@ static class Physics
     windForce = new PVector(nWindForce, 0);
   }
   
+  void setPosition(PVector location)
+  {
+    position = location;
+  }
+  
   void initializePhysics(boolean nHasGravity, boolean nHasWind)
   {
     hasGravity = nHasGravity;
