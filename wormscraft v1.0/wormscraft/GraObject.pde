@@ -1,8 +1,6 @@
 class GraObject
 {
-  PVector position = new PVector(0,0);
-
-  Physics physics = new Physics(this);
+  Physics physics = new Physics();
   
   GraObject()
   {

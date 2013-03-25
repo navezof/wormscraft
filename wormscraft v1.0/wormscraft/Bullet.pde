@@ -10,7 +10,7 @@ class Bullet extends GraObject
   
   Bullet(float x, float y, float _angle, float _power)
   {    
-    position = new PVector(x, y);
+    physics.position = new PVector(x, y);
     angle = _angle;
     power = _power;
     smoothFire = 10;
@@ -29,7 +29,8 @@ class Bullet extends GraObject
   void draw()
   {
     fill(150);
-    ellipse(position.x, position.y, bWidth, bHeight);
+
+    ellipse(physics.position.x, physics.position.y, bWidth, bHeight);
     
     super.draw();
   }

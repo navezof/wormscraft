@@ -1,8 +1,8 @@
 static class Physics
 {
   // Reference to the object
-  GraObject obj;
   
+  PVector position = new PVector(0, 0);
   PVector velocity = new PVector(0, 0);
   PVector acceleration = new PVector(0, 0);
   
@@ -17,17 +17,15 @@ static class Physics
   boolean  hasWind = false;
   PVector windForce;
   
-  Physics(GraObject nObj)
+  Physics()
   {
-    obj = nObj;
     mass = 1;
     gravity = new PVector(0, 0.1 * mass);
     windForce = new PVector(0.01, 0);
   }
   
-  Physics(GraObject nObj, float nMass, float nGravity, float nWindForce)
+  Physics(float nMass, float nGravity, float nWindForce)
   {
-    obj = nObj;
     mass = nMass;
     gravity = new PVector(0, nGravity * mass);
     windForce = new PVector(nWindForce, 0);
@@ -47,7 +45,7 @@ static class Physics
     applyForces();
 
     velocity.add(acceleration);
-    obj.position.add(velocity);
+    position.add(velocity);
     acceleration.mult(0);
   }
   
