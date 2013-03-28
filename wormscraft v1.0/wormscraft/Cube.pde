@@ -1,6 +1,8 @@
 class Cube extends GraObject
 {
 
+  int type;
+  
   Cube(float x, float y)
   {
 
@@ -17,6 +19,6 @@ class Cube extends GraObject
   { 
     println(physics.position.x);
     println(physics.position.y);
-    rect(physics.position.x * 32, physics.position.y * 32, 32, 32);
+    rect(physics.position.x, physics.position.y, 32, 32);
   }
 }
