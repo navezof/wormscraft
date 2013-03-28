@@ -28,7 +28,7 @@ class Game {
     int m = millis();
     this._deltaTime = (m - _lastTime) / 1000;
     this._lastTime = m;
-    
+
     //Clear _nextUpdate if no empty  
     if (!this._nextUpdate.isEmpty()) {
       this._nextUpdate.clear();
@@ -92,10 +92,10 @@ class Game {
     this._items.remove(target);
   }
 
- public float getDeltaTime() {
-  return this._deltaTime; 
- }
- 
+  public float getDeltaTime() {
+    return this._deltaTime;
+  }
+
   //Interaction with current team and current player.
 
   public void nextPlayerToPlay() {
