@@ -2,7 +2,6 @@ ArrayList objects = new ArrayList();
 Launcher launcher;
 Bullet newBullet;
 
-
 void setup()
 {
   size(640, 380);
