@@ -13,7 +13,7 @@ class MainMenu {
     File mapFolder = new File(dataPath("map"));
 
     if (!mapFolder.exists()) {
-       print("Error: Folder ./map/ not found");
+       println("Error: Folder ./map/ not found");
        exit();
     }
 
@@ -29,7 +29,7 @@ class MainMenu {
 
     //Charger les images des maps
     for (int i =0; i < mapFiles.length; i++) {
-      print("Load map: " + mapFiles[i] + " and the image: " +  mapFiles[i].substring(0, (mapFiles[i].length() - 4)));
+      println("Load map: " + mapFiles[i] + " and the image: " +  mapFiles[i].substring(0, (mapFiles[i].length() - 4)));
       _mapButton[i] = new MapButton((int)(width / 3.6), (int)(height / 8), loadImage("./map/img/" + mapFiles[i].substring(0, (mapFiles[i].length() - 4))+ ".png"),  mapFiles[i].substring(0, (mapFiles[i].length() - 4)));
     }
   }

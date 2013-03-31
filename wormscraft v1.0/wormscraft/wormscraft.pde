@@ -1,32 +1,43 @@
-ArrayList objects = new ArrayList();
-Launcher launcher;
-Bullet newBullet;
+MainMenu menu;
+Game game;
+boolean mouseClick = false;
+boolean mouseStillPressed = false;
 
-void setup()
-{
-  size(640, 380);
-  launcher = new Launcher(50, height - 200);
-  objects.add(launcher);
+void setup() {
+  size(800, 600);
+  menu = new MainMenu();
+  game = null;
 }
 
-void draw()
-{
-  background(255);
-  for  (int i = objects.size() - 1; i >= 0; i--)
-  {
-    GraObject obj = (GraObject) objects.get(i);
-    obj.update();
-    obj.draw();
+
+void update() {
+  if (mouseClick)
+    mouseClick = false;
+  if (mousePressed) {
+    if (!mouseStillPressed) {
+      mouseStillPressed = true; 
+      mouseClick =  true;
+    }
+  } 
+  else if (mouseStillPressed) {
+    mouseStillPressed = false;
+  } 
+  if (game != null) {
+    game.update();
+  } 
+  else {
+    menu.update();
   }
 }
 
-void mousePressed()
-  {
-    launcher.mouseDown = true;
+void draw() {
+  background(100);
+  update();
+  if (game != null) {
+    game.draw();
+  } 
+  else {
+    menu.draw();
   }
-  
-void mouseReleased()
-  {
-    newBullet = (Bullet) launcher.shoot(mouseX, mouseY);
-    objects.add(newBullet);
-  }
+}
+

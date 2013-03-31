@@ -1,3 +1,38 @@
+void startGame(String mapName) {
+  int sizeX;
+  int sizeY;
+
+  int map[][];
+  String lines[] = loadStrings("./map/"+mapName+".txt");
+  if (lines != null && lines.length > 2) {
+    String sizes[] = lines[0].split(" ");
+    if (sizes != null && sizes.length == 2) {
+      sizeX =  Integer.parseInt(sizes[0]); 
+      sizeY =  Integer.parseInt(sizes[1]); 
+
+      map = new int[sizeY][];
+      for (int i = 1; i < lines.length; i++) {
+        map[i - 1] = new int[sizeX];
+        String block[] = lines[i].split(" ");
+        if (block.length > sizeX) {
+          println("Error: In File map `" +  mapName + "`: Line " + i + " Line too long;");
+          break;
+        }
+        for (int j = 0; j < block.length; j++) {
+          map[i - 1][j] = Integer.parseInt(block[j]);
+        }
+      }
+      //TODO Game = new Game(map);
+    } 
+    else {
+      println("Error: In File map `" +  mapName + "` size X and Y are Unvalid");
+    }
+  } 
+  else {
+    println("Error: In File map `" +  mapName + "` Bad File or Not found");
+  }
+}
+
 class Game {
 
   private List<GraObject> _currentUpdate;
@@ -28,7 +63,7 @@ class Game {
     int m = millis();
     this._deltaTime = (m - _lastTime) / 1000;
     this._lastTime = m;
-
+    
     //Clear _nextUpdate if no empty  
     if (!this._nextUpdate.isEmpty()) {
       this._nextUpdate.clear();
@@ -92,10 +127,10 @@ class Game {
     this._items.remove(target);
   }
 
-  public float getDeltaTime() {
-    return this._deltaTime;
-  }
-
+ public float getDeltaTime() {
+  return this._deltaTime; 
+ }
+ 
   //Interaction with current team and current player.
 
   public void nextPlayerToPlay() {

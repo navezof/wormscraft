@@ -47,7 +47,7 @@ class MapButton {
   }
 
   void update(int posX, int posY) {
-    if (mousePressed 
+    if (mouseClick 
       && mouseX >= posX && mouseX <= posX + this._xSize 
       && mouseY >= posY && mouseY <= posY + this._ySize)
       startGame(this._mapName);
