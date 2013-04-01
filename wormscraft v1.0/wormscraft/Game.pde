@@ -22,12 +22,12 @@ void startGame(String mapName) {
           map[i - 1][j] = Integer.parseInt(block[j]);
         }
       }
-      //TODO Game = new Game(map);
+      game = new Game(map);
     } 
     else {
       println("Error: In File map `" +  mapName + "` size X and Y are Unvalid");
     }
-  } 
+  }
   else {
     println("Error: In File map `" +  mapName + "` Bad File or Not found");
   }
@@ -51,6 +51,24 @@ class Game {
   private GraObject[][] _map;
 
   Game(int[][] map) {
+    _team = new ArrayList<Team>();
+    _characters = new ArrayList<GraObject>();
+    _items = new ArrayList<GraObject>();
+    _bullets = new ArrayList<GraObject>();
+    
+    _currentUpdate = new ArrayList<GraObject>();
+    _nextUpdate = new ArrayList<GraObject>();
+
+    _map = new GraObject[map.length][];
+    for (int mY = 0; mY < map.length; mY++) {
+    _map[mY]= new GraObject[map[mY].length];
+      for (int mX = 0; mX < map[mY].length; mX++) {
+        if (map[mY][mX] != 0) {
+          println("New cube in:  x=" + mX * caseWidth + " && y=" + mY * caseWidth);
+          _map[mY][mX] = new Cube(mX, mY, map[mY][mX]);
+        }
+      }
+    }
   }
 
   public void update() {
@@ -63,7 +81,7 @@ class Game {
     int m = millis();
     this._deltaTime = (m - _lastTime) / 1000;
     this._lastTime = m;
-    
+
     //Clear _nextUpdate if no empty  
     if (!this._nextUpdate.isEmpty()) {
       this._nextUpdate.clear();
@@ -93,7 +111,8 @@ class Game {
     //Draw Map's Object
     for (int i = 0; i < this._map.length; i++) {
       for (int j = 0; j <  this._map[i].length; j++) {
-        this._map[i][j].draw();
+        if (_map[i][j] != null)
+          this._map[i][j].draw();
       }
     }
     //Draw HUD
@@ -127,10 +146,10 @@ class Game {
     this._items.remove(target);
   }
 
- public float getDeltaTime() {
-  return this._deltaTime; 
- }
- 
+  public float getDeltaTime() {
+    return this._deltaTime;
+  }
+
   //Interaction with current team and current player.
 
   public void nextPlayerToPlay() {

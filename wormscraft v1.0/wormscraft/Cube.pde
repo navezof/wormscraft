@@ -34,10 +34,8 @@ class Cube extends GraObject
 
   void draw()
   { 
-    println(physics.position.x);
-    println(physics.position.y);
     image(_texture, physics.position.x * caseSize, physics.position.y * caseSize, caseSize, caseSize);
-//   rect(physics.position.x * caseSize, physics.position.y * caseSize, caseSize, caseSize);
+    //rect(physics.position.x * caseSize, physics.position.y * caseSize, caseSize, caseSize);
   }
 }
 
