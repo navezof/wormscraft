@@ -52,23 +52,31 @@ class Game {
 
   Game(int[][] map) {
     _team = new ArrayList<Team>();
+    _team.add(new Team("Team 1"));
+    _team.add(new Team("Team 2"));
     _characters = new ArrayList<GraObject>();
     _items = new ArrayList<GraObject>();
     _bullets = new ArrayList<GraObject>();
     
     _currentUpdate = new ArrayList<GraObject>();
     _nextUpdate = new ArrayList<GraObject>();
-
     _map = new GraObject[map.length][];
+    
+    int _currentTeam = 0;
     for (int mY = 0; mY < map.length; mY++) {
     _map[mY]= new GraObject[map[mY].length];
       for (int mX = 0; mX < map[mY].length; mX++) {
-        if (map[mY][mX] != 0) {
+        if (map[mY][mX] > 0) {
           println("New cube in:  x=" + mX * caseWidth + " && y=" + mY * caseWidth);
           _map[mY][mX] = new Cube(mX, mY, map[mY][mX]);
+        } else if (map[mY][mX] != -1) {
+            _team.get(_currentTeam)._pl.add(new Charater(mX, mY));
+            _currentTeam++;
+            _currentTeam = _currentTeam % _team.size();
         }
       }
     }
+    _team.add(new Team("Mob"));
   }
 
   public void update() {
@@ -154,7 +162,7 @@ class Game {
 
   public void nextPlayerToPlay() {
     this._currentCharacters++;
-    if (this._currentCharacters >= this._team.get(this._currentTeam).getNbPlayer()) {
+    if (this._currentCharacters >= this._team.get(this._currentTeam)._pl.size()) {
       this._currentCharacters = 0;
       this._currentTeam++;
       if (this._currentTeam >= this._team.size()) {

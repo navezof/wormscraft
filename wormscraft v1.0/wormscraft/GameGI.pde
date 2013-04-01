@@ -19,7 +19,6 @@ class GameGI {
     //display Exit button
     //display current weapon
     //display weapon inventory button
-    
     //display weapon inventory
   }
 }

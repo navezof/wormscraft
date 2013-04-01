@@ -1,10 +1,13 @@
 class Team {
-  private int _nbPlayer;
+  private String _name;
+  public List<Charater> _pl;
   
+  Team(String name) {
+    _name = name;
+    _pl = new ArrayList<Charater>();
+  }
   
-  Team(){}
-  
-  public int getNbPlayer() {
-     return _nbPlayer; 
+  public String getName() {
+    return _name;  
   }
 }
