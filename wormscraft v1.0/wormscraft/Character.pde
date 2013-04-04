@@ -4,7 +4,11 @@ class Charater extends GraObject {
   float xSizeBody = caseSize;
   float ySizeBody = caseSize;
   PVector  position;
-
+  
+  float  pv = 100;
+  float armor  = 0;
+  
+  
   Charater(int x, int y) {
     physics.position = new PVector(x, y);
       println("x charac= " + x);
@@ -27,6 +31,32 @@ class Charater extends GraObject {
         physics.velocity.x = 0.1;
     }
     text(  physics.position.x + " \n" +  physics.position. y, physics.position.x + 100, physics.position.y + 100 + ySizeHead * 2);
+  }
+
+  void healPv(float heal) {
+    pv += heal;
+    if (pv > 100) {
+      pv = 100;
+    }
+  }
+  
+    void addArmor(float addA) {
+    armor += addA;
+    if (armor > 100) {
+      armor = 100;
+    }
+  }
+  
+  void getDamage(float damage) {
+    if (armor <=  0) {
+      pv-= damage;
+    }
+    else if (armor < damage) {
+      pv -= (damage - armor);
+    }
+    else {
+      armor -= damage;
+    }
   }
 
   void update() {
