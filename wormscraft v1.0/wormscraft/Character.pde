@@ -6,7 +6,7 @@ class Charater extends GraObject {
   PVector  position;
 
   Charater(int x, int y) {
-    position = new PVector(x, y);
+    physics.position = new PVector(x, y);
 
   }
 
@@ -31,7 +31,6 @@ class Charater extends GraObject {
   void update() {
         getInput();
     super.update();
-    physics.position.y = height/2;
   }
 }
 
