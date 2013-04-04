@@ -70,7 +70,9 @@ class Game {
           println("New cube in:  x=" + mX * caseWidth + " && y=" + mY * caseWidth);
           _map[mY][mX] = new Cube(mX, mY, map[mY][mX]);
         } else if (map[mY][mX] != -1) {
-            _team.get(_currentTeam)._pl.add(new Charater(mX, mY));
+            Charater tmp = new Charater(mX, mY);
+            _characters.add(tmp);
+            _team.get(_currentTeam)._pl.add(tmp);
             _currentTeam++;
             _currentTeam = _currentTeam % _team.size();
         }
