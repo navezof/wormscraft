@@ -1,8 +1,8 @@
 class Charater extends GraObject {
-  float xSizeHead = 20;
-  float ySizeHead = 20;
-  float xSizeBody = 20;
-  float ySizeBody = 20;
+  float xSizeHead = caseSize;
+  float ySizeHead = caseSize;
+  float xSizeBody = caseSize;
+  float ySizeBody = caseSize;
   PVector  position;
 
   Charater(int x, int y) {
@@ -21,9 +21,9 @@ class Charater extends GraObject {
     physics.velocity.x = 0;
     if (keyPressed) {
       if (key == 'q')
-        physics.velocity.x = -1;
+        physics.velocity.x = -caseSize;
       if (key == 'd')
-        physics.velocity.x = 1;
+        physics.velocity.x = caseSize;
     }
     text( physics.velocity.x, physics.position.x, physics.position.y + ySizeHead * 2);
   }
