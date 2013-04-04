@@ -26,6 +26,7 @@ void update() {
     mouseStillPressed = false;
   } 
   if (game != null) {
+    println("Update Main");
     game.update();
   } 
   else {

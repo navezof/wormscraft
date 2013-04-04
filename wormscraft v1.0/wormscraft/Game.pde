@@ -50,6 +50,10 @@ class Game {
   private float _lastTime;
   private GraObject[][] _map;
 
+  private int _mapSizeX;
+  private int _mapSizeY;
+
+  private PVector _wind;
   Game(int[][] map) {
     _team = new ArrayList<Team>();
     _team.add(new Team("Team 1"));
@@ -57,24 +61,29 @@ class Game {
     _characters = new ArrayList<GraObject>();
     _items = new ArrayList<GraObject>();
     _bullets = new ArrayList<GraObject>();
-    
+    _currentTeam = 0;
+    _currentCharacters = 0;
+
     _currentUpdate = new ArrayList<GraObject>();
     _nextUpdate = new ArrayList<GraObject>();
     _map = new GraObject[map.length][];
-    
+
     int _currentTeam = 0;
+    _mapSizeX = map[0].length;
+    _mapSizeY = map.length;
     for (int mY = 0; mY < map.length; mY++) {
-    _map[mY]= new GraObject[map[mY].length];
+      _map[mY]= new GraObject[map[mY].length];
       for (int mX = 0; mX < map[mY].length; mX++) {
         if (map[mY][mX] > 0) {
           println("New cube in:  x=" + mX * caseWidth + " && y=" + mY * caseWidth);
           _map[mY][mX] = new Cube(mX, mY, map[mY][mX]);
-        } else if (map[mY][mX] != -1) {
-            Charater tmp = new Charater(mX, mY);
-            _characters.add(tmp);
-            _team.get(_currentTeam)._pl.add(tmp);
-            _currentTeam++;
-            _currentTeam = _currentTeam % _team.size();
+        } 
+        else if (map[mY][mX] != -1) {
+          Charater tmp = new Charater(mX, mY);
+          _characters.add(tmp);
+          _team.get(_currentTeam)._pl.add(tmp);
+          _currentTeam++;
+          _currentTeam = _currentTeam % _team.size();
         }
       }
     }
@@ -83,6 +92,7 @@ class Game {
 
   public void update() {
     // switch the Update list.
+    println("Update Game Start");
     List<GraObject> tmpList = this._currentUpdate;
     this._currentUpdate = this._nextUpdate;
     this._nextUpdate = tmpList;
@@ -91,6 +101,9 @@ class Game {
     int m = millis();
     this._deltaTime = (m - _lastTime) / 1000;
     this._lastTime = m;
+
+    //Update current player
+    _team.get(_currentTeam)._pl.get(_currentCharacters).update();
 
     //Clear _nextUpdate if no empty  
     if (!this._nextUpdate.isEmpty()) {
@@ -102,6 +115,7 @@ class Game {
       this._currentUpdate.get(0).update();
       this._currentUpdate.remove(0);
     }
+    println("Update Game End");
   }
 
   // draw every object
@@ -158,6 +172,29 @@ class Game {
 
   public float getDeltaTime() {
     return this._deltaTime;
+  }
+
+  public int getMapSizeX() {
+    return this._mapSizeX;
+  }
+
+  public int getMapSizeY() {
+    return this._mapSizeY;
+  }
+
+  public GraObject getMapCube(int trgX, int trgY) {
+    if (trgX > 0 && trgX < this._mapSizeX
+      &&trgY > 0 && trgY < this._mapSizeY) {
+      return _map[trgX][trgY];
+    }
+    return null;
+  }
+
+  public void setMapCube(int trgX, int trgY, GraObject target) {
+    if (trgX > 0 && trgX < this._mapSizeX
+      &&trgY > 0 && trgY < this._mapSizeY) {
+      _map[trgX][trgY] = target;
+    }
   }
 
   //Interaction with current team and current player.
