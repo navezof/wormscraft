@@ -54,6 +54,9 @@ class Game {
   private int _mapSizeY;
 
   private PVector _wind;
+  
+  private PImage _background;
+  
   Game(int[][] map) {
     _team = new ArrayList<Team>();
     _team.add(new Team("Team 1"));
@@ -68,6 +71,8 @@ class Game {
     _nextUpdate = new ArrayList<GraObject>();
     _map = new GraObject[map.length][];
 
+    _background = loadImage("img/background.png");
+
     int _currentTeam = 0;
     _mapSizeX = map[0].length;
     _mapSizeY = map.length;
@@ -78,7 +83,8 @@ class Game {
           println("New cube in:  x=" + mX * caseWidth + " && y=" + mY * caseWidth);
           _map[mY][mX] = new Cube(mX, mY, map[mY][mX]);
         } 
-        else if (map[mY][mX] != -1) {
+        else if (map[mY][mX] == -1) {
+          println("New Player   X:" + mX + " Y:" + mY);
           Charater tmp = new Charater(mX, mY);
           _characters.add(tmp);
           _team.get(_currentTeam)._pl.add(tmp);
@@ -103,7 +109,9 @@ class Game {
     this._lastTime = m;
 
     //Update current player
-    _team.get(_currentTeam)._pl.get(_currentCharacters).update();
+    if (this._team.get(_currentTeam) != null && this._team.get(_currentTeam)._pl.get(_currentCharacters) != null) {
+      this._team.get(_currentTeam)._pl.get(_currentCharacters).update();
+    }
 
     //Clear _nextUpdate if no empty  
     if (!this._nextUpdate.isEmpty()) {
@@ -118,8 +126,18 @@ class Game {
     println("Update Game End");
   }
 
-  // draw every object
+  //Init wind
+  private void windInit() {
+    float windMaxSpeed = 7.0F;
+    
+      if (_wind == null) {
+         _wind = new PVector(); 
+      }
+      _wind.x = random(-1.0F, 1.0F) * random(0.0F, windMaxSpeed);
+      _wind.y = random(-1.0F, 1.0F) * random(0.0F, windMaxSpeed / 4);
+  }
 
+  // draw every object
   private void drawForeach(List<GraObject> T) {
     for (int i=0; i < T.size(); i++) {
       T.get(i).draw();
@@ -127,23 +145,29 @@ class Game {
   }
 
   public void draw() {
+    //Draw background
+    if (_background != null) {
+       image(_background, 0, 0, width, height); 
+    }
+    
+    //Draw Map's Object
+    for (int i = 0; i < this._map.length; i++) {
+      for (int j = 0; j <  this._map[i].length; j++) {
+        if (this._map[i][j] != null)
+          this._map[i][j].draw();
+      }
+    }
+
     //Draw every Object
     drawForeach(this._characters);
     drawForeach(this._items);
     drawForeach(this._bullets);
 
-    //Draw Map's Object
-    for (int i = 0; i < this._map.length; i++) {
-      for (int j = 0; j <  this._map[i].length; j++) {
-        if (_map[i][j] != null)
-          this._map[i][j].draw();
-      }
-    }
     //Draw HUD
   }
 
   public void setUpdate(GraObject target) {
-    _nextUpdate.add(target);
+    this._nextUpdate.add(target);
   }
 
   // Items list Manager
@@ -185,7 +209,7 @@ class Game {
   public GraObject getMapCube(int trgX, int trgY) {
     if (trgX > 0 && trgX < this._mapSizeX
       &&trgY > 0 && trgY < this._mapSizeY) {
-      return _map[trgX][trgY];
+      return this._map[trgX][trgY];
     }
     return null;
   }
@@ -193,10 +217,13 @@ class Game {
   public void setMapCube(int trgX, int trgY, GraObject target) {
     if (trgX > 0 && trgX < this._mapSizeX
       &&trgY > 0 && trgY < this._mapSizeY) {
-      _map[trgX][trgY] = target;
+      this._map[trgX][trgY] = target;
     }
   }
 
+  public PVector getWind() {
+     return this._wind; 
+  }
   //Interaction with current team and current player.
 
   public void nextPlayerToPlay() {
