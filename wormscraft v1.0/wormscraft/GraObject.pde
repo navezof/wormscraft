@@ -1,6 +1,6 @@
 class GraObject
 {
-  Physics physics = new Physics();
+  Physics physics = new Physics(this);
 
   GraObject()
   {
@@ -13,6 +13,10 @@ class GraObject
   }
 
   void draw()
+  {
+  }
+  
+  public void onCollision(GraObject collider)
   {
   }
 }

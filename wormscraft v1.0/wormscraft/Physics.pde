@@ -1,15 +1,19 @@
 class Physics
-{
+{ 
   // Reference to the object
+  GraObject  graObject;
 
   PVector position = new PVector(0, 0);
   PVector velocity = new PVector(0, 0);
   PVector acceleration = new PVector(0, 0);
 
+  String tag;
+
   float mass;
   float time;
   
   float bouncingcoefficient;
+  float bounce = 1;
 
   // Property of the physics
   boolean  hasGravity = true;
@@ -19,8 +23,11 @@ class Physics
   boolean  hasWind = false;
   PVector windForce;
 
-  Physics()
+  int detectionSize = 1;
+
+  Physics(GraObject obj)
   {
+    graObject = obj;
     mass = 1;
     gravity = new PVector(0, 0.01 * mass);
     windForce = new PVector(0.001, 0);
@@ -59,6 +66,46 @@ class Physics
 
   void detectCollision()
   {
+    float dx;
+    float dy;
+
+    if ((dx = position.x - detectionSize) < 0)
+      dx = 0;
+    if ((dy = position.y - detectionSize) < 0)
+      dy = 0;
+    for (float x = dx; x <= position.x + detectionSize; x++)
+    {
+      for (float y = dy; y <= position.y + detectionSize; y++)
+      {
+        if (x >= 0 && x < game.getMapSizeX() - 1 && y >= 0 && y < game.getMapSizeY() - 1)
+        {
+          if (checkCollision(game._map[(int) y][(int) x]))
+          {
+            graObject.onCollision(game._map[(int) y][(int) x]);
+             //hasGravity = false;
+             //acceleration.mult(0);
+             //velocity.mult(0);
+          }
+        }
+      }
+    } 
+  }
+
+  boolean checkCollision(GraObject collider)
+  {
+    if (collider != null)
+    {
+      if (position.y > collider.physics.position.y + caseSize)
+        return (false);
+      if (position.y + caseSize < collider.physics.position.y)
+        return (false);
+      if (position.x > collider.physics.position.x + caseSize)
+        return (false);
+      if (position.x + caseSize < collider.physics.position.x)
+        return (false);
+       return (true);
+    }
+    return (false);
   }
 
   void detectBorder()

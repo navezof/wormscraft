@@ -7,6 +7,8 @@ class Cube extends GraObject
 
   Cube(float x, float y, int type)
   {
+	physics.tag = "GROUND";
+  
     _texture = loadImage(cubetexdir + type + ".png");
     if (type == 3 || type == 7)
     {

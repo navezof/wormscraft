@@ -8,16 +8,18 @@ class Bullet extends GraObject
   Bullet(float x, float y, float _angle, float _power)
   {    
     physics.position = new PVector(x, y);
+    physics.tag = "BULLET";
     angle = _angle;
     power = _power;
     smoothFire = 200;
 
-    physics.initializePhysics(true, true);
+    physics.initializePhysics(true, false);
     physics.applyForce(new PVector((power/smoothFire * cos(angle)), (power/smoothFire * sin(angle))));
   }
 
   void update()
-  {    
+  {
+    game._nextUpdate.add(this);
     super.update();
   }
 
@@ -25,9 +27,15 @@ class Bullet extends GraObject
   {
     fill(150);
 
-    ellipse(physics.position.x * caseSize, physics.position.y * caseSize, caseSize, caseSize);
+    rect(physics.position.x * caseSize, physics.position.y * caseSize, caseSize, caseSize);
 
     super.draw();
+  }
+  
+  public void onCollision(GraObject collider)
+  {
+    if (collider.physics.tag == "GROUND")
+      game.destroyBullet(this);
   }
 }
 
