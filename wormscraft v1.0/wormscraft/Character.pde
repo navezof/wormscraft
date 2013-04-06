@@ -4,17 +4,17 @@ class Charater extends GraObject {
   float xSizeBody = caseSize;
   float ySizeBody = caseSize;
   PVector  position;
-  
+
   float  pv = 100;
   float armor  = 0;
-  
-  
+
+
   Charater(int x, int y) {
     physics.position = new PVector(x, y);
-      println("x charac= " + x);
-      println("y charac= " + y);
-      
-      physics.tag = "PLAYER";
+    println("x charac= " + x);
+    println("y charac= " + y);
+
+    physics.tag = "PLAYER";
   }
 
   void draw() {
@@ -41,14 +41,14 @@ class Charater extends GraObject {
       pv = 100;
     }
   }
-  
-    void addArmor(float addA) {
+
+  void addArmor(float addA) {
     armor += addA;
     if (armor > 100) {
       armor = 100;
     }
   }
-  
+
   void getDamage(float damage) {
     if (armor <=  0) {
       pv-= damage;
@@ -61,12 +61,24 @@ class Charater extends GraObject {
     }
   }
 
+  public float getPv() {
+    return  this.pv;
+  }
+
+  public float getArmor() {
+    return this.armor;
+  }
+
+  public float getTimer() {
+    return this.timer;
+  }
+
   void update() {
-        getInput();
+    getInput();
     super.update();
     physics.position.y = 3 * caseSize;
   }
-  
+
   void onCollision(GraObject collider)
   {
     println("Le player a collisioner avec quelques chose de type : " + collider.physics.tag);
