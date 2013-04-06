@@ -13,6 +13,8 @@ class Charater extends GraObject {
     physics.position = new PVector(x, y);
       println("x charac= " + x);
       println("y charac= " + y);
+      
+      physics.tag = "PLAYER";
   }
 
   void draw() {
@@ -63,6 +65,11 @@ class Charater extends GraObject {
         getInput();
     super.update();
     physics.position.y = 3 * caseSize;
+  }
+  
+  void onCollision(GraObject collider)
+  {
+    println("Le player a collisioner avec quelques chose de type : " + collider.physics.tag);
   }
 }
 

@@ -82,9 +82,9 @@ class Physics
           if (checkCollision(game._map[(int) y][(int) x]))
           {
             graObject.onCollision(game._map[(int) y][(int) x]);
-             //hasGravity = false;
-             //acceleration.mult(0);
-             //velocity.mult(0);
+            //hasGravity = false;
+            //acceleration.mult(0);
+            //velocity.mult(0);
           }
         }
       }
