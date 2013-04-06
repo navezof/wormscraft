@@ -39,7 +39,7 @@ class Game {
   private List<GraObject> _nextUpdate;
 
   private List<Team> _team;
-  private List<GraObject> _characters;
+  private List<Charater> _characters;
   private List<GraObject> _bullets;
   private List<GraObject> _items;  //item on the map;
 
@@ -54,14 +54,17 @@ class Game {
   private int _mapSizeY;
 
   private PVector _wind;
-  
+  public  float windMaxSpeed = 7.0F;
+
   private PImage _background;
-  
+
+  private GameGI gui;
+
   Game(int[][] map) {
     _team = new ArrayList<Team>();
     _team.add(new Team("Team 1"));
     _team.add(new Team("Team 2"));
-    _characters = new ArrayList<GraObject>();
+    _characters = new ArrayList<Charater>();
     _items = new ArrayList<GraObject>();
     _bullets = new ArrayList<GraObject>();
     _currentTeam = 0;
@@ -94,6 +97,8 @@ class Game {
       }
     }
     _team.add(new Team("Mob"));
+    this.windInit();
+    gui = new GameGI(this);
   }
 
   public void update() {
@@ -123,18 +128,18 @@ class Game {
       this._currentUpdate.get(0).update();
       this._currentUpdate.remove(0);
     }
+
+    gui.update();
     println("Update Game End");
   }
 
   //Init wind
-  private void windInit() {
-    float windMaxSpeed = 7.0F;
-    
-      if (_wind == null) {
-         _wind = new PVector(); 
-      }
-      _wind.x = random(-1.0F, 1.0F) * random(0.0F, windMaxSpeed);
-      _wind.y = random(-1.0F, 1.0F) * random(0.0F, windMaxSpeed / 4);
+  private void windInit() {    
+    if (_wind == null) {
+      _wind = new PVector();
+    }
+    _wind.x = random(-1.0F, 1.0F) * random(0.0F, windMaxSpeed);
+    _wind.y = 0;
   }
 
   // draw every object
@@ -147,9 +152,9 @@ class Game {
   public void draw() {
     //Draw background
     if (_background != null) {
-       image(_background, 0, 0, width, height); 
+      image(_background, 0, 0, width, height);
     }
-    
+
     //Draw Map's Object
     for (int i = 0; i < this._map.length; i++) {
       for (int j = 0; j <  this._map[i].length; j++) {
@@ -159,24 +164,42 @@ class Game {
     }
 
     //Draw every Object
-    drawForeach(this._characters);
+    for (int i=0; i < this._characters.size(); i++) {
+      this._characters.get(i).draw();
+    }
     drawForeach(this._items);
     drawForeach(this._bullets);
 
     //Draw HUD
+    gui.draw();
   }
 
   public void setUpdate(GraObject target) {
     this._nextUpdate.add(target);
   }
 
-  // Items list Manager
-  public void newPlayer(GraObject target) {
+  public Charater getCurrentCharacter() {
+    if (this._team.get(_currentTeam) != null && this._team.get(_currentTeam)._pl.get(_currentCharacters) != null) {
+      return this._team.get(_currentTeam)._pl.get(_currentCharacters);
+    }
+    return null;
+  }
+
+  public Team getTeam(int tar) {
+    if (this._team.get(tar) != null) {
+      return this._team.get(tar);
+    }
+    return null;
+  }
+
+  public void newPlayer(Charater target) {
     this._characters.add(target);
+    //Add to Team
   }
 
   public void destroyPlayer(GraObject target) { 
     this._characters.remove(target);
+    //TODO remove from Team
   }
 
   public void newBullet(GraObject target) {
@@ -221,8 +244,8 @@ class Game {
     }
   }
 
-  public PVector getWind() {
-     return this._wind; 
+  public float getWind() {
+    return this._wind.x;
   }
   //Interaction with current team and current player.
 
@@ -236,6 +259,8 @@ class Game {
       }
       //Sinon, tous le monde est mort !
     }
+    this.windInit();
+    gui.updateData();
   }
 }
 

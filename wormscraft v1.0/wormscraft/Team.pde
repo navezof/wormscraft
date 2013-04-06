@@ -8,6 +8,10 @@ class Team {
   }
   
   public String getName() {
-    return _name;  
+    return _name;
+  }
+  
+  public int getNbMember() {
+   return _pl.size(); 
   }
 }
