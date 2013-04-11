@@ -36,6 +36,8 @@ class Bullet extends GraObject
   {
     if (collider.physics.tag == "GROUND")
       game.destroyBullet(this);
+    if (collider.physics.tag == "PLAYER")
+      game.destroyBullet(this);
   }
 }
 

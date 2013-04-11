@@ -8,6 +8,7 @@ class Charater extends GraObject {
   float  pv = 100;
   float armor  = 0;
 
+  float timer;
 
   Charater(int x, int y) {
     physics.position = new PVector(x, y);
@@ -19,9 +20,9 @@ class Charater extends GraObject {
 
   void draw() {
     fill(0, 0, 255);
-    rect(physics.position.x * caseSize, physics.position.y, xSizeHead, ySizeHead);
+    rect(physics.position.x * caseSize, physics.position.y * caseSize, xSizeHead, ySizeHead);
     fill(0, 255, 0);
-    rect(physics.position.x * caseSize, physics.position.y + ySizeHead, xSizeBody, ySizeBody);
+    rect(physics.position.x * caseSize, (physics.position.y + 1) * caseSize, xSizeBody, ySizeBody);
   }
 
   void  getInput() {
@@ -76,12 +77,16 @@ class Charater extends GraObject {
   void update() {
     getInput();
     super.update();
-    physics.position.y = 3 * caseSize;
+    physics.checkGround();
+    //physics.position.y = 3 * caseSize;
   }
 
   void onCollision(GraObject collider)
   {
-    println("Le player a collisioner avec quelques chose de type : " + collider.physics.tag);
+    if (collider.physics.tag == "BULLET")
+    {
+      game.destroyPlayer(this);
+    }
   }
 }
 

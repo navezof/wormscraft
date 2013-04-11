@@ -33,8 +33,9 @@ class Physics
     windForce = new PVector(0.001, 0);
   }
 
-  Physics(float nMass, float nGravity, float nWindForce)
+  Physics(GraObject obj, float nMass, float nGravity, float nWindForce)
   {
+    graObject = obj;
     mass = nMass;
     gravity = new PVector(0, nGravity * mass);
     windForce = new PVector(nWindForce, 0);
@@ -54,7 +55,8 @@ class Physics
   void update()
   {
     time++;
-
+  
+    detectCharacterCollision();
     detectCollision();
     applyForces();
 
@@ -62,6 +64,22 @@ class Physics
     position.add(velocity);
     acceleration.mult(0);
     detectBorder();
+  }
+
+  void detectCharacterCollision()
+  {
+    for (int i = 0; i < game._characters.size() ; i++)
+    {
+      GraObject charac = game._characters.get(i);
+      if (charac != graObject)
+      {
+        if (checkCollision(charac))
+        {
+          graObject.onCollision(charac);
+          charac.onCollision(graObject);
+        }
+      }
+    }
   }
 
   void detectCollision()
@@ -77,14 +95,11 @@ class Physics
     {
       for (float y = dy; y <= position.y + detectionSize; y++)
       {
-        if (x >= 0 && x < game.getMapSizeX() - 1 && y >= 0 && y < game.getMapSizeY() - 1)
+        if (x >= 0 && x < game.getMapSizeX() && y >= 0 && y < game.getMapSizeY())
         {
           if (checkCollision(game._map[(int) y][(int) x]))
           {
             graObject.onCollision(game._map[(int) y][(int) x]);
-            //hasGravity = false;
-            //acceleration.mult(0);
-            //velocity.mult(0);
           }
         }
       }
@@ -95,15 +110,26 @@ class Physics
   {
     if (collider != null)
     {
-      if (position.y > collider.physics.position.y + caseSize)
+      
+      if (position.y >= collider.physics.position.y + 1)
         return (false);
-      if (position.y + caseSize < collider.physics.position.y)
+      if (position.y + 1 <= collider.physics.position.y)
         return (false);
-      if (position.x > collider.physics.position.x + caseSize)
+      if (position.x >= collider.physics.position.x + 1)
         return (false);
-      if (position.x + caseSize < collider.physics.position.x)
+      if (position.x + 1 <= collider.physics.position.x)
         return (false);
-       return (true);
+      /*
+      if (position.y >= collider.physics.position.y + caseSize)
+        return (false);
+      if (position.y + caseSize <= collider.physics.position.y)
+        return (false);
+      if (position.x >= collider.physics.position.x + caseSize)
+        return (false);
+      if (position.x + caseSize <= collider.physics.position.x)
+        return (false);
+        */
+      return (true);
     }
     return (false);
   }
@@ -140,5 +166,26 @@ class Physics
     PVector f = PVector.div(force, mass);
     acceleration.add(f);
   }
+  
+  void checkGround()
+  {
+    print("Check GRound : " + position.y);
+    if (position.y + 2 < game.getMapSizeY())
+    {
+      if (game._map[(int) position.y + 2][(int) position.x] == null)
+      {
+        println("Put gravity on for : " + position.y);
+        hasGravity = true;
+      }
+      else
+      {
+        println("Something under : " + ((int) position.y));
+        hasGravity = false;
+        velocity.mult(0);
+        acceleration.mult(0);
+      }
+    }
+  }
 }
+
 
