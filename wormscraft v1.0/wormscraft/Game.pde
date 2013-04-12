@@ -59,11 +59,14 @@ class Game {
   private PImage _background;
 
   private GameGI gui;
-
+  private boolean _partyOver;
+  private int _endVisualEfect = 0;
+  
   Game(int[][] map) {
     _team = new ArrayList<Team>();
     _team.add(new Team("Team 1"));
     _team.add(new Team("Team 2"));
+    _partyOver = false;
     _characters = new ArrayList<Charater>();
     _items = new ArrayList<GraObject>();
     _bullets = new ArrayList<GraObject>();
@@ -102,6 +105,12 @@ class Game {
   }
 
   public void update() {
+    if (_partyOver) {
+      if (mouseClick) {
+         game = null; 
+      }
+       return;
+    }
     // switch the Update list.
     println("Update Game Start");
     List<GraObject> tmpList = this._currentUpdate;
@@ -114,10 +123,11 @@ class Game {
     this._lastTime = m;
 
     //Update current player
-    if (this._team.get(_currentTeam) != null && this._team.get(_currentTeam)._pl.get(_currentCharacters) != null) {
+    if (_currentTeam < this._team.size() && this._team.get(_currentTeam) != null && _currentCharacters < this._team.get(_currentTeam)._pl.size() && this._team.get(_currentTeam)._pl.get(_currentCharacters) != null) {
       this._team.get(_currentTeam)._pl.get(_currentCharacters).update();
+    } else {
+       getCurrentCharacter(); 
     }
-
     //Clear _nextUpdate if no empty  
     if (!this._nextUpdate.isEmpty()) {
       this._nextUpdate.clear();
@@ -172,6 +182,17 @@ class Game {
 
     //Draw HUD
     gui.draw();
+    
+    //Game Over Screen
+    if (_partyOver) {
+      fill(0, 0, 0, _endVisualEfect);
+      if (_endVisualEfect < 255)
+        _endVisualEfect+=3;
+      rect(0, 0, width, height);
+      textAlign(CENTER, CENTER);
+      fill(255);
+      text("Game Over\n\n" + (_team.get(1)._pl.size() == 0 ? "Player 0 win" : "Player 1 win"), width / 2, height / 2);
+    }
   }
 
   public void setUpdate(GraObject target) {
@@ -179,8 +200,12 @@ class Game {
   }
 
   public Charater getCurrentCharacter() {
-    if (this._team.get(_currentTeam) != null && this._team.get(_currentTeam)._pl.get(_currentCharacters) != null) {
+    if (_team.get(0)._pl.size() == 0 || _team.get(1)._pl.size() == 0)
+       _partyOver = true;
+    if (_currentTeam < this._team.size() && this._team.get(_currentTeam) != null && _currentCharacters < this._team.get(_currentTeam)._pl.size() && this._team.get(_currentTeam)._pl.get(_currentCharacters) != null) {
       return this._team.get(_currentTeam)._pl.get(_currentCharacters);
+    } else {
+       nextPlayerToPlay();
     }
     return null;
   }
@@ -192,14 +217,18 @@ class Game {
     return null;
   }
 
-  public void newPlayer(Charater target) {
+  public void newPlayer(Charater target, int teamId) {
     this._characters.add(target);
-    //Add to Team
+    if (teamId < _team.size()) {
+     _team.get(teamId)._pl.add(target); 
+    }
   }
 
   public void destroyPlayer(GraObject target) { 
     this._characters.remove(target);
-    //TODO remove from Team
+    for (int i = 0; i < _team.size(); i++) {
+      _team.get(i)._pl.remove(target);
+    }
   }
 
   public void newBullet(GraObject target) {
@@ -257,10 +286,10 @@ class Game {
       if (this._currentTeam >= this._team.size()) {
         this._currentTeam = 0;
       }
-      //Sinon, tous le monde est mort !
     }
     this.windInit();
-    gui.updateData();
+    if (gui != null)
+      gui.updateData();
   }
 }
 
