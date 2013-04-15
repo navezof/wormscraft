@@ -27,6 +27,9 @@ class Cube extends GraObject
     {
       invincible = false;
     }
+    
+    pWidth = 32;
+    pHeight = 32;
   }
 
   void update()

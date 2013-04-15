@@ -23,6 +23,7 @@ class Physics
   boolean  hasWind = false;
   PVector windForce;
 
+  // The detection will detect all object within a square of detectionSize
   int detectionSize = 1;
 
   Physics(GraObject obj)
@@ -110,25 +111,21 @@ class Physics
   {
     if (collider != null)
     {
-      
-      if (position.y >= collider.physics.position.y + 1)
+      if (position.y * caseSize >= collider.physics.position.y * caseSize + caseSize)
         return (false);
-      if (position.y + 1 <= collider.physics.position.y)
+      if (position.y * caseSize +  graObject.pHeight <= collider.physics.position.y * caseSize)
         return (false);
-      if (position.x >= collider.physics.position.x + 1)
+      if (position.x * caseSize >= collider.physics.position.x * caseSize + collider.pWidth)
+      {
+        print(">>>>> 1");
         return (false);
-      if (position.x + 1 <= collider.physics.position.x)
+      }
+      if (position.x * caseSize + graObject.pWidth <= collider.physics.position.x * caseSize)
+      {
+        print(">>>>> 2");
         return (false);
-      /*
-      if (position.y >= collider.physics.position.y + caseSize)
-        return (false);
-      if (position.y + caseSize <= collider.physics.position.y)
-        return (false);
-      if (position.x >= collider.physics.position.x + caseSize)
-        return (false);
-      if (position.x + caseSize <= collider.physics.position.x)
-        return (false);
-        */
+      }
+      print("Col : " + (position.x * caseSize) + " - " + (collider.physics.position.x * caseSize + collider.pWidth));
       return (true);
     }
     return (false);
@@ -169,17 +166,15 @@ class Physics
   
   void checkGround()
   {
-    print("Check GRound : " + position.y);
     if (position.y + 2 < game.getMapSizeY())
     {
-      if (game._map[(int) position.y + 2][(int) position.x] == null)
+      print("posx : " + (int) position.x);
+      if (game._map[(int) position.y + 2][(int) round(position.x + 0.2f)] == null)
       {
-        println("Put gravity on for : " + position.y);
         hasGravity = true;
       }
       else
       {
-        println("Something under : " + ((int) position.y));
         hasGravity = false;
         velocity.mult(0);
         acceleration.mult(0);

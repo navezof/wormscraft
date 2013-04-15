@@ -16,9 +16,13 @@ class Charater extends GraObject {
     println("y charac= " + y);
 
     physics.tag = "PLAYER";
+    
+    pWidth = 32;
+    pHeight = 32;
   }
 
-  void draw() {
+  void draw()
+  {
     fill(0, 0, 255);
     rect(physics.position.x * caseSize, physics.position.y * caseSize, xSizeHead, ySizeHead);
     fill(0, 255, 0);

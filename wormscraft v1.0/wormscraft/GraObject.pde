@@ -2,6 +2,9 @@ class GraObject
 {
   Physics physics = new Physics(this);
 
+  float pWidth;
+  float pHeight;
+  
   GraObject()
   {
     physics.initializePhysics(true, false);
