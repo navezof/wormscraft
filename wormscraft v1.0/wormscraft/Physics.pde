@@ -116,16 +116,9 @@ class Physics
       if (position.y * caseSize +  graObject.pHeight <= collider.physics.position.y * caseSize)
         return (false);
       if (position.x * caseSize >= collider.physics.position.x * caseSize + collider.pWidth)
-      {
-        print(">>>>> 1");
         return (false);
-      }
       if (position.x * caseSize + graObject.pWidth <= collider.physics.position.x * caseSize)
-      {
-        print(">>>>> 2");
         return (false);
-      }
-      print("Col : " + (position.x * caseSize) + " - " + (collider.physics.position.x * caseSize + collider.pWidth));
       return (true);
     }
     return (false);
