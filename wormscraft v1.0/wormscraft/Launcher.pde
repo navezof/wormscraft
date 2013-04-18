@@ -1,8 +1,5 @@
 class Launcher extends GraObject
 {
-  // Position of the launcher
-  PVector position;
-
   // Angle of shoot
   float angle;
 
@@ -15,29 +12,30 @@ class Launcher extends GraObject
 
   // If true the mouse is down
   boolean mouseDown;
+  
+  boolean ready;
 
   Launcher(float x, float y)
   {
-    position = new PVector(x, y);
+    physics.position.x = x;
+    physics.position.y = y;
     angle = 0;
     maxPower = 100;
     power = 0;
     powerLoadingSpeed = 1;
     mouseDown = false;
+    ready = false;
+    
+    physics.hasGravity = false;
+    
+    pWidth = 32;
+    pHeight = 10;
   }
 
-  void update()
+  void update(float x, float y)
   {
-    if (mouseDown)
-    {
-      if (power < maxPower)
-        power += powerLoadingSpeed;
-    }
-    else
-    {
-      if (power > 0)
-        power -= powerLoadingSpeed;
-    }
+    physics.position.x = x;
+    physics.position.y = y;
 
     super.update();
   }
@@ -48,22 +46,46 @@ class Launcher extends GraObject
 
     if (mouseDown)
     {
-      angle = atan2(mouseY - (position.y * caseSize), mouseX - (position.x * caseSize));
+      angle = atan2(mouseY - (physics.position.y * caseSize), mouseX - (physics.position.x * caseSize));
 
       text("power : " + power, mouseX - 20, mouseY);
       text("angle : " + angle, mouseX - 20, mouseY + 30);
 
-      line(position.x * caseSize, position.y * caseSize, mouseX, mouseY);
+      line(physics.position.x * caseSize, physics.position.y * caseSize, mouseX, mouseY);
     }
-    rect(position.x * caseSize, position.y * caseSize, caseSize, caseSize);
+    rect(physics.position.x * caseSize, physics.position.y * caseSize, pWidth, pHeight);
 
     super.draw();
   }
 
-  Bullet shoot(float xshoot, float yshoot)
-  {     
+  void charge(boolean mouseDownClicked)
+  {
+    mouseDown = mouseDownClicked;
+    if (mouseDown)
+    {
+      println("Charging");
+      if (power < maxPower)
+        power += powerLoadingSpeed;
+      ready = true;  
+    }
+    else
+    {
+      if (ready)
+        shoot();
+      if (power > 0)
+        power -= powerLoadingSpeed;
+      ready = false;
+    }
+  }
+  
+  void shoot()
+  {
+    println("shoot");    
     mouseDown = false;
-    return (new Bullet(position.x, position.y, angle, power));
+    
+    Bullet bullet = new Bullet(physics.position.x -2, physics.position.y, angle, power);
+    game.newBullet(bullet);
+    game.setUpdate(bullet);
   }
 }
 

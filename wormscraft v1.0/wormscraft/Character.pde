@@ -10,6 +10,11 @@ class Charater extends GraObject {
 
   float timer;
 
+  // Direction of the character 1 = right, -1 = left
+  float direction;
+
+  Launcher weapon;
+
   Charater(int x, int y) {
     physics.position = new PVector(x, y);
     println("x charac= " + x);
@@ -19,6 +24,8 @@ class Charater extends GraObject {
     
     pWidth = 32;
     pHeight = 32;
+    
+    weapon = new Launcher(x, y);
   }
 
   void draw()
@@ -27,6 +34,8 @@ class Charater extends GraObject {
     rect(physics.position.x * caseSize, physics.position.y * caseSize, xSizeHead, ySizeHead);
     fill(0, 255, 0);
     rect(physics.position.x * caseSize, (physics.position.y + 1) * caseSize, xSizeBody, ySizeBody);
+    
+    weapon.draw();
   }
 
   void  getInput() {
@@ -37,6 +46,16 @@ class Charater extends GraObject {
       if (key == 'd' || key == 'D' )
         physics.velocity.x = 0.1;
     }
+    
+    if (mousePressed)
+    {
+      weapon.charge(true);
+    }
+    else
+    {
+      weapon.charge(false);
+    }
+    
     text(  physics.position.x + " \n" +  physics.position. y, physics.position.x + 100, physics.position.y + 100 + ySizeHead * 2);
   }
 
@@ -79,10 +98,12 @@ class Charater extends GraObject {
   }
 
   void update() {
+    weapon.update(physics.position.x, physics.position.y);
     getInput();
+    
     super.update();
+    
     physics.checkGround();
-    //physics.position.y = 3 * caseSize;
   }
 
   void onCollision(GraObject collider)
@@ -93,4 +114,5 @@ class Charater extends GraObject {
     }
   }
 }
+
 

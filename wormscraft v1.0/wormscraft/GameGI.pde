@@ -140,8 +140,8 @@ class GameGI {
         image(_windLeftNone, _windBoxPosX, _windBoxPosY);
       }
       for (int i = 0; i < 4; i++) {
-        println(100 - (i * 20));
-        println(windPower * -100 / 7);        
+        //println(100 - (i * 20));
+        //println(windPower * -100 / 7);        
         if (windPower * -100 / 7 >= 100 - (i * 20)) {
           image(_windCenterFull, _windBoxPosX + (_windCenterFull.width * (i + 1)), _windBoxPosY);
         } 
@@ -169,8 +169,8 @@ class GameGI {
         image(_windRightNone, _windBoxPosX + (_windCenterFull.width * 9), _windBoxPosY);
       }
       for (int i = 4; i < 8; i++) {
-        println(100 - (i * 20));
-        println(windPower * 100 / 7);        
+        //println(100 - (i * 20));
+        //println(windPower * 100 / 7);        
         if (windPower * 100 / 7 >= ((i - 4) * 20)) {
           image(_windCenterFull, _windBoxPosX + (_windCenterFull.width * (i + 1)), _windBoxPosY);
         } 

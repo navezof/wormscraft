@@ -34,6 +34,7 @@ class Cube extends GraObject
 
   void update()
   {
+    if (mouseClick)
     physics.update();
   }
 

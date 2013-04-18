@@ -102,6 +102,18 @@ class Game {
     _team.add(new Team("Mob"));
     this.windInit();
     gui = new GameGI(this);
+    
+    /*
+    * Testing
+    *
+    */
+    
+    //Bullet bullet = new Bullet(2, 2, 0, 0);
+    //newBullet(bullet);
+    //setUpdate(bullet);
+    
+    //_bullets.add(new Bullet(2, 2, 0, 0));
+    //_nextUpdate.add(_bullets.get(0));
   }
 
   public void update() {
@@ -112,7 +124,7 @@ class Game {
        return;
     }
     // switch the Update list.
-    println("Update Game Start");
+    //println("Update Game Start");
     List<GraObject> tmpList = this._currentUpdate;
     this._currentUpdate = this._nextUpdate;
     this._nextUpdate = tmpList;
@@ -140,7 +152,7 @@ class Game {
     }
 
     gui.update();
-    println("Update Game End");
+    //println("Update Game End");
   }
 
   //Init wind
