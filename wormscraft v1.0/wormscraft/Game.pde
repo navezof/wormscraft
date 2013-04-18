@@ -35,8 +35,8 @@ void startGame(String mapName) {
 
 class Game {
 
-  private List<GraObject> _currentUpdate;
-  private List<GraObject> _nextUpdate;
+  private ArrayList<GraObject> _currentUpdate;
+  private ArrayList<GraObject> _nextUpdate;
 
   private List<Team> _team;
   private List<Charater> _characters;
@@ -124,8 +124,7 @@ class Game {
        return;
     }
     // switch the Update list.
-    //println("Update Game Start");
-    List<GraObject> tmpList = this._currentUpdate;
+    ArrayList<GraObject> tmpList = this._currentUpdate;
     this._currentUpdate = this._nextUpdate;
     this._nextUpdate = tmpList;
 
@@ -134,25 +133,27 @@ class Game {
     this._deltaTime = (m - _lastTime) / 1000;
     this._lastTime = m;
 
+   //Clear _nextUpdate if no empty  
+    if (!this._nextUpdate.isEmpty()) {
+      this._nextUpdate.clear();
+    }
+    
     //Update current player
     if (_currentTeam < this._team.size() && this._team.get(_currentTeam) != null && _currentCharacters < this._team.get(_currentTeam)._pl.size() && this._team.get(_currentTeam)._pl.get(_currentCharacters) != null) {
       this._team.get(_currentTeam)._pl.get(_currentCharacters).update();
     } else {
        getCurrentCharacter(); 
     }
-    //Clear _nextUpdate if no empty  
-    if (!this._nextUpdate.isEmpty()) {
-      this._nextUpdate.clear();
-    }
+   
 
     //Foreach GraObject whose have to be update, current character, bullet, and co...
     while (this._currentUpdate.size () > 0) {
+
       this._currentUpdate.get(0).update();
       this._currentUpdate.remove(0);
     }
 
     gui.update();
-    //println("Update Game End");
   }
 
   //Init wind

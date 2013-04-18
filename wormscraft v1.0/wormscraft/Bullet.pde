@@ -17,9 +17,7 @@ class Bullet extends GraObject
     pHeight = 10;
 
     physics.initializePhysics(true, false);
-    physics.applyForce(new PVector((power/smoothFire * cos(angle)), (power/smoothFire * sin(angle))));    
-    
-    //game._nextUpdate.add(this);
+    physics.applyForce(new PVector((power/smoothFire * cos(angle)), (power/smoothFire * sin(angle))));        
   }
 
   void update()
