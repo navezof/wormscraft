@@ -161,12 +161,12 @@ class Physics
   {
     if (position.y + 2 < game.getMapSizeY())
     {
-      if (game._map[(int) position.y + 2][(int) round(position.x + 0.2f)] == null)
+      if (game._map.length <= (int) position.y + 2 || game._map[(int) position.y + 2].length <= (int) round(position.x + 0.2f))
       {
         hasGravity = true;
-      }
-      else
-      {
+      } else if (game._map[(int) position.y + 2][(int) round(position.x + 0.2f)] == null) {
+        hasGravity = true;
+      } else {
         hasGravity = false;
         velocity.mult(0);
         acceleration.mult(0);
