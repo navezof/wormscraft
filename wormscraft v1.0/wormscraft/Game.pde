@@ -102,7 +102,10 @@ class Game {
     _team.add(new Team("Mob"));
     this.windInit();
     gui = new GameGI(this);
-    
+     if (_currentTeam < this._team.size() && this._team.get(_currentTeam) != null && _currentCharacters < this._team.get(_currentTeam)._pl.size() && this._team.get(_currentTeam)._pl.get(_currentCharacters) != null) {
+         this._team.get(_currentTeam)._pl.get(_currentCharacters).actif = true;
+         this.setUpdate(this._team.get(_currentTeam)._pl.get(_currentCharacters));
+     }
     /*
     * Testing
     *
@@ -139,15 +142,14 @@ class Game {
     }
     
     //Update current player
-    if (_currentTeam < this._team.size() && this._team.get(_currentTeam) != null && _currentCharacters < this._team.get(_currentTeam)._pl.size() && this._team.get(_currentTeam)._pl.get(_currentCharacters) != null) {
-      this._team.get(_currentTeam)._pl.get(_currentCharacters).update();
-    } else {
-       getCurrentCharacter(); 
+    if (!(_currentTeam < this._team.size() && this._team.get(_currentTeam) != null && _currentCharacters < this._team.get(_currentTeam)._pl.size() && this._team.get(_currentTeam)._pl.get(_currentCharacters) != null)) {
+       nextPlayerToPlay();
+       this._team.get(_currentTeam)._pl.get(_currentCharacters).update();
     }
    
 
     //Foreach GraObject whose have to be update, current character, bullet, and co...
-    while (this._currentUpdate.size () > 0) {
+    while (this._currentUpdate.size() > 0) {
 
       this._currentUpdate.get(0).update();
       this._currentUpdate.remove(0);
@@ -242,6 +244,7 @@ class Game {
     for (int i = 0; i < _team.size(); i++) {
       _team.get(i)._pl.remove(target);
     }
+    this._nextUpdate.remove(target);
   }
 
   public void newBullet(GraObject target) {
@@ -250,6 +253,7 @@ class Game {
 
   public void destroyBullet(GraObject target) {
     this._bullets.remove(target);
+    this._nextUpdate.remove(target);
   }
   public void newItem(GraObject target) {
     this._items.add(target);
@@ -257,6 +261,7 @@ class Game {
 
   public void destroyItem(GraObject target) {
     this._items.remove(target);
+    this._nextUpdate.remove(target);
   }
 
   public float getDeltaTime() {
@@ -282,7 +287,14 @@ class Game {
   public void setMapCube(int trgX, int trgY, GraObject target) {
     if (trgX > 0 && trgX < this._mapSizeX
       &&trgY > 0 && trgY < this._mapSizeY) {
-      this._map[trgX][trgY] = target;
+      this._map[trgY][trgX] = target;
+    }
+  }
+  
+    public void removeMapCube(int trgX, int trgY) {
+    if (trgX > 0 && trgX < this._mapSizeX
+      &&trgY > 0 && trgY < this._mapSizeY) {
+      this._map[trgY][trgX] = null;
     }
   }
 
@@ -299,6 +311,11 @@ class Game {
       if (this._currentTeam >= this._team.size()) {
         this._currentTeam = 0;
       }
+    }
+    if (!(this._currentCharacters >= this._team.get(this._currentTeam)._pl.size())) {
+      this._team.get(this._currentTeam)._pl.get(this._currentCharacters).restartTimer();
+      this._team.get(this._currentTeam)._pl.get(this._currentCharacters).actif = true;
+      this.setUpdate(this._team.get(_currentTeam)._pl.get(_currentCharacters));
     }
     this.windInit();
     if (gui != null)

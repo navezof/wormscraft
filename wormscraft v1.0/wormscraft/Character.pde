@@ -1,21 +1,25 @@
 class Charater extends GraObject {
+  int TIMERDEFAULT = 300000;
   float xSizeHead = caseSize;
   float ySizeHead = caseSize;
   float xSizeBody = caseSize;
   float ySizeBody = caseSize;
-  PVector  position;
 
+  Consumable item;
   float  pv = 100;
   float armor  = 0;
 
-  float timer;
+  int timer;
+  int startTimer;
 
-  // Direction of the character 1 = right, -1 = left
+  public boolean actif = false;
+ // Direction of the character 1 = right, -1 = left
   float direction;
 
   Launcher weapon;
 
   Charater(int x, int y) {
+    item = new Pickaxe(this, 20);
     physics.position = new PVector(x, y);
     println("x charac= " + x);
     println("y charac= " + y);
@@ -35,7 +39,10 @@ class Charater extends GraObject {
     fill(0, 255, 0);
     rect(physics.position.x * caseSize, (physics.position.y + 1) * caseSize, xSizeBody, ySizeBody);
     
-    weapon.draw();
+    //weapon.draw();
+    if (item != null) {
+     item.draw(); 
+    }
   }
 
   void  getInput() {
@@ -49,7 +56,7 @@ class Charater extends GraObject {
     
     if (mousePressed)
     {
-      weapon.charge(true);
+      //weapon.charge(true);
     }
     else
     {
@@ -85,6 +92,14 @@ class Charater extends GraObject {
     }
   }
 
+  public float getXPos() {
+    return this.physics.position.x; 
+  }
+
+  public float getYPos() {
+    return this.physics.position.y; 
+  }
+
   public float getPv() {
     return  this.pv;
   }
@@ -94,16 +109,36 @@ class Charater extends GraObject {
   }
 
   public float getTimer() {
-    return this.timer;
+    return (float)this.timer / 100;
   }
 
+  public void restartTimer() {
+    this.startTimer = millis();
+  }
+ 
   void update() {
     weapon.update(physics.position.x, physics.position.y);
-    getInput();
-    
+    if (actif) {
+      getInput();
+    }
+    float tmpX = this.physics.position.x;
+    float tmpY = this.physics.position.y;
+
     super.update();
-    
     physics.checkGround();
+    if (actif || tmpX != this.physics.position.x || tmpY != this.physics.position.y) {
+     game.setUpdate(this); 
+    }
+
+    if (item != null) {
+     item.update(); 
+    }
+
+    this.timer = millis();
+     if (startTimer + TIMERDEFAULT <= this.timer) {
+       game.nextPlayerToPlay();
+       actif = false;
+    }
   }
 
   void onCollision(GraObject collider)

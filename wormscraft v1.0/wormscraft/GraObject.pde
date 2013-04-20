@@ -4,7 +4,7 @@ class GraObject
 
   float pWidth;
   float pHeight;
-  
+
   GraObject()
   {
     physics.initializePhysics(true, false);

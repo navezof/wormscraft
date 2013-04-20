@@ -3,8 +3,8 @@ Game game;
 boolean mouseClick = false;
 boolean mouseStillPressed = false;
 int caseSize = 32;
-int caseWidth = 15;
-int caseHeight = 24;
+int caseWidth = 32;
+int caseHeight = 32;
 
 void setup() {
   size(800, 600);
