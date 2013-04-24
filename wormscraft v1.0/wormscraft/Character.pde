@@ -35,9 +35,9 @@ class Charater extends GraObject {
   void draw()
   {
     fill(0, 0, 255);
-    rect(physics.position.x * caseSize, physics.position.y * caseSize, xSizeHead, ySizeHead);
+    rect(physics.position.x * caseSize, (physics.position.y - 1) * caseSize, xSizeHead, ySizeHead);
     fill(0, 255, 0);
-    rect(physics.position.x * caseSize, (physics.position.y + 1) * caseSize, xSizeBody, ySizeBody);
+    rect(physics.position.x * caseSize, physics.position.y * caseSize, xSizeBody, ySizeBody);
     
     //weapon.draw();
     if (item != null) {

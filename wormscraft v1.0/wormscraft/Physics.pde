@@ -26,6 +26,10 @@ class Physics
   // The detection will detect all object within a square of detectionSize
   int detectionSize = 1;
 
+  Cube cube;
+  Cube cubeLeft;
+  Cube cubeRight;
+  
   Physics(GraObject obj)
   {
     graObject = obj;
@@ -159,14 +163,16 @@ class Physics
   
   void checkGround()
   {
-    if (position.y + 2 < game.getMapSizeY())
+    if (position.y + 1 < game.getMapSizeY())
     {
-      if (game._map.length <= (int) position.y + 2 || game._map[(int) position.y + 2].length <= (int) round(position.x + 0.2f))
+      cube = (Cube) game._map[(int) position.y + 1][(int) position.x];
+      cubeRight = (Cube) game._map[(int) position.y + 1][(int) position.x + 1];
+      if (!checkCollision(cube) && !checkCollision(cubeRight))
       {
         hasGravity = true;
-      } else if (game._map[(int) position.y + 2][(int) round(position.x + 0.2f)] == null) {
-        hasGravity = true;
-      } else {
+      }
+      else
+      {
         hasGravity = false;
         velocity.mult(0);
         acceleration.mult(0);
