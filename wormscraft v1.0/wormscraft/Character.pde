@@ -45,15 +45,48 @@ class Charater extends GraObject {
     }
   }
 
-  void  getInput() {
+  void  getInput()
+  {
     physics.velocity.x = 0;
-    if (keyPressed) {
+    if (keyPressed)
+    {
       if (key == 'q' || key == 'Q')
-        physics.velocity.x = -0.1;
+      {
+         if (physics.position.x - 1 > 0 && physics.checkCollision(game._map[(int) physics.position.y][(int) physics.position.x]) == false)
+          {
+            if (!physics.hasGravity && (game._map[(int) (physics.position.y - 1)][(int) (physics.position.x)] == null))
+            {
+              if ((game._map[(int) (physics.position.y)][(int) (physics.position.x)] == null))
+              {
+                physics.velocity.x = -0.1;
+              }
+            }
+          }
+      }
       if (key == 'd' || key == 'D' )
-        physics.velocity.x = 0.1;
+      {
+        if (!physics.hasGravity && (game._map[(int) (physics.position.y - 1)][(int) (physics.position.x + 1)] == null))
+        {
+          if ((game._map[(int) (physics.position.y)][(int) (physics.position.x + 1)] == null))
+          {
+            physics.velocity.x = 0.1;
+          }
+        }
+      }
+        /*
+         if (physics.checkCollision(game._map[(int) physics.position.y][(int) physics.position.x + 1]) == false)
+          {
+            if (physics.hasGravity && (physics.checkCollision(game._map[(int) physics.position.y + 1][(int) physics.position.x + 1]) == false) &&
+              (physics.checkCollision(game._map[(int) physics.position.y - 1][(int) physics.position.x + 1]) == false))
+              {
+                physics.velocity.x = 0.1;
+              }
+             else
+                physics.velocity.x = 0.1; 
+          }      
+      }
+      */
     }
-    
     if (mousePressed)
     {
       //weapon.charge(true);
