@@ -1,8 +1,8 @@
 class Charater extends GraObject {
   int TIMERDEFAULT = 300000;
-  float xSizeHead = caseSize;
+  float xSizeHead = caseSize - 10;
   float ySizeHead = caseSize;
-  float xSizeBody = caseSize;
+  float xSizeBody = caseSize - 10;
   float ySizeBody = caseSize;
 
   Consumable item;
@@ -12,8 +12,15 @@ class Charater extends GraObject {
   int timer;
   int startTimer;
 
+  PImage leftImage;
+  PImage rightImage;
+  PImage waitImage;
+  
+  PImage currentImage;
+
+
   public boolean actif = false;
- // Direction of the character 1 = right, -1 = left
+  // Direction of the character 1 = right, -1 = left
   float direction;
 
   Launcher weapon;
@@ -23,12 +30,15 @@ class Charater extends GraObject {
     physics.position = new PVector(x, y);
     println("x charac= " + x);
     println("y charac= " + y);
-
+    leftImage = loadImage("leftImage.png");
+    rightImage = loadImage("rightImage.png");
+    waitImage = loadImage("waitImage.png");
     physics.tag = "PLAYER";
-    
+
+    currentImage = waitImage;
     pWidth = 32;
     pHeight = 32;
-    
+
     weapon = new Launcher(x, y);
   }
 
@@ -38,30 +48,33 @@ class Charater extends GraObject {
     rect(physics.position.x * caseSize, (physics.position.y - 1) * caseSize, xSizeHead, ySizeHead);
     fill(0, 255, 0);
     rect(physics.position.x * caseSize, physics.position.y * caseSize, xSizeBody, ySizeBody);
-    
+    image(currentImage,physics.position.x * caseSize, (physics.position.y - 1) * caseSize, xSizeBody, ySizeBody *2 );
+
     //weapon.draw();
     if (item != null) {
-     item.draw(); 
+      item.draw();
     }
   }
 
   void  getInput()
   {
+    currentImage = waitImage;
     physics.velocity.x = 0;
     if (keyPressed)
     {
       if (key == 'q' || key == 'Q')
       {
-         if (physics.position.x - 1 > 0 && physics.checkCollision(game._map[(int) physics.position.y][(int) physics.position.x]) == false)
+        if (physics.position.x - 1 > 0 && physics.checkCollision(game._map[(int) physics.position.y][(int) physics.position.x]) == false)
+        {
+          if (!physics.hasGravity && (game._map[(int) (physics.position.y - 1)][(int) (physics.position.x)] == null))
           {
-            if (!physics.hasGravity && (game._map[(int) (physics.position.y - 1)][(int) (physics.position.x)] == null))
+            if ((game._map[(int) (physics.position.y)][(int) (physics.position.x)] == null))
             {
-              if ((game._map[(int) (physics.position.y)][(int) (physics.position.x)] == null))
-              {
-                physics.velocity.x = -0.1;
-              }
+              currentImage = leftImage;
+              physics.velocity.x = -0.1;
             }
           }
+        }
       }
       if (key == 'd' || key == 'D' )
       {
@@ -69,23 +82,24 @@ class Charater extends GraObject {
         {
           if ((game._map[(int) (physics.position.y)][(int) (physics.position.x + 1)] == null))
           {
+            currentImage = rightImage;
             physics.velocity.x = 0.1;
           }
         }
       }
-        /*
+      /*
          if (physics.checkCollision(game._map[(int) physics.position.y][(int) physics.position.x + 1]) == false)
-          {
-            if (physics.hasGravity && (physics.checkCollision(game._map[(int) physics.position.y + 1][(int) physics.position.x + 1]) == false) &&
-              (physics.checkCollision(game._map[(int) physics.position.y - 1][(int) physics.position.x + 1]) == false))
-              {
-                physics.velocity.x = 0.1;
-              }
-             else
-                physics.velocity.x = 0.1; 
-          }      
-      }
-      */
+       {
+       if (physics.hasGravity && (physics.checkCollision(game._map[(int) physics.position.y + 1][(int) physics.position.x + 1]) == false) &&
+       (physics.checkCollision(game._map[(int) physics.position.y - 1][(int) physics.position.x + 1]) == false))
+       {
+       physics.velocity.x = 0.1;
+       }
+       else
+       physics.velocity.x = 0.1; 
+       }      
+       }
+       */
     }
     if (mousePressed)
     {
@@ -95,7 +109,7 @@ class Charater extends GraObject {
     {
       weapon.charge(false);
     }
-    
+
     text(  physics.position.x + " \n" +  physics.position. y, physics.position.x + 100, physics.position.y + 100 + ySizeHead * 2);
   }
 
@@ -126,11 +140,11 @@ class Charater extends GraObject {
   }
 
   public float getXPos() {
-    return this.physics.position.x; 
+    return this.physics.position.x;
   }
 
   public float getYPos() {
-    return this.physics.position.y; 
+    return this.physics.position.y;
   }
 
   public float getPv() {
@@ -148,7 +162,7 @@ class Charater extends GraObject {
   public void restartTimer() {
     this.startTimer = millis();
   }
- 
+
   void update() {
     weapon.update(physics.position.x, physics.position.y);
     if (actif) {
@@ -160,17 +174,17 @@ class Charater extends GraObject {
     super.update();
     physics.checkGround();
     if (actif || tmpX != this.physics.position.x || tmpY != this.physics.position.y) {
-     game.setUpdate(this); 
+      game.setUpdate(this);
     }
 
     if (item != null) {
-     item.update(); 
+      item.update();
     }
 
     this.timer = millis();
-     if (startTimer + TIMERDEFAULT <= this.timer) {
-       game.nextPlayerToPlay();
-       actif = false;
+    if (startTimer + TIMERDEFAULT <= this.timer) {
+      game.nextPlayerToPlay();
+      actif = false;
     }
   }
 
@@ -182,5 +196,4 @@ class Charater extends GraObject {
     }
   }
 }
-
 
