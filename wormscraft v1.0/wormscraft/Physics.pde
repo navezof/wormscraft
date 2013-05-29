@@ -119,7 +119,7 @@ class Physics
         return (false);
       if (position.y * caseSize +  graObject.pHeight <= collider.physics.position.y * caseSize)
         return (false);
-      if (position.x * caseSize > collider.physics.position.x * caseSize + collider.pWidth)
+      if (position.x * caseSize >= collider.physics.position.x * caseSize + collider.pWidth)
         return (false);
       if (position.x * caseSize + graObject.pWidth <= collider.physics.position.x * caseSize)
         return (false);

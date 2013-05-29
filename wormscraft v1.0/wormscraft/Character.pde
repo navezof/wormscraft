@@ -40,7 +40,7 @@ class Charater extends GraObject {
     physics.tag = "PLAYER";
 
     currentImage = waitImage;
-    pWidth = 32;
+    pWidth = xSizeBody;
     pHeight = 32;
 
     weapon = new Launcher(x, y);
@@ -68,39 +68,56 @@ class Charater extends GraObject {
     {
       if (key == 'q' || key == 'Q')
       {
-        if (physics.position.x - 1 > 0 && physics.checkCollision(game._map[(int) physics.position.y][(int) physics.position.x]) == false)
+        if (physics.position.x - 1 > 0 && physics.position.y - 2 > 0 && (physics.checkCollision(game._map[(int) physics.position.y][(int) physics.position.x]) == false) && 
+            (physics.checkCollision(game._map[(int) physics.position.y - 2][(int) physics.position.x - 1]) == false))
         {
-          if (!physics.hasGravity && (game._map[(int) (physics.position.y - 1)][(int) (physics.position.x)] == null))
+          if (!physics.hasGravity && physics.checkCollision(game._map[(int) (physics.position.y - 1)][(int) (physics.position.x)]) == false)
+           {
+             if (physics.checkCollision(game._map[(int) (physics.position.y)][(int) (physics.position.x)]) == false)
+             {
+               currentImage = leftImage;
+               physics.velocity.x = -walkSpeed;
+             }
+           }
+          else 
           {
-            if ((game._map[(int) (physics.position.y)][(int) (physics.position.x)] == null))
+            if ((game._map[(int) (physics.position.y)][(int) (physics.position.x - 1)] == null) &&
+                (game._map[(int) (physics.position.y + 1)][(int) (physics.position.x - 1)] == null)) /*&&
+                /*(game._map[(int) (physics.position.y - 1)][(int) (physics.position.x - 1)] == null)*/
             {
               currentImage = leftImage;
-              physics.velocity.x = -walkSpeed;
+              physics.velocity.x = -walkSpeed * airSpeedCoef;
             }
-          }
-          else {
-            currentImage = leftImage;
-            physics.velocity.x = -walkSpeed * airSpeedCoef;
           }
         }
       }
       if (key == 'd' || key == 'D' )
       {
-        if (physics.position.x - 1 > 0 && physics.checkCollision(game._map[(int) physics.position.y][(int) physics.position.x]) == false) {
-          if (!physics.hasGravity && (game._map[(int) (physics.position.y - 1)][(int) (physics.position.x)] == null))
+        if (physics.position.x + 1 < game._mapSizeX && physics.checkCollision(game._map[(int) physics.position.y][(int) physics.position.x + 1]) == false)
           {
-            if ((game._map[(int) (physics.position.y)][(int) (physics.position.x + 1)] == null))
+            if (!physics.hasGravity && physics.checkCollision(game._map[(int) (physics.position.y - 1)][(int) (physics.position.x + 1)]) == false)
             {
+              if (physics.checkCollision(game._map[(int) (physics.position.y)][(int) (physics.position.x + 1)]) == false)
+              {
               currentImage = rightImage;
               physics.velocity.x = walkSpeed;
+              }
+            }
+            else
+            {   
+               if ((game._map[(int) (physics.position.y)][(int) (physics.position.x)] == null) &&
+                (game._map[(int) (physics.position.y + 1)][(int) (physics.position.x)] == null) &&
+                (game._map[(int) (physics.position.y - 1)][(int) (physics.position.x)] == null) &&
+                (game._map[(int) (physics.position.y)][(int) (physics.position.x + 1)] == null) &&
+                (game._map[(int) (physics.position.y + 1)][(int) (physics.position.x + 1)] == null) &&
+                (game._map[(int) (physics.position.y - 1)][(int) (physics.position.x + 1)] == null))
+                {
+                  currentImage = rightImage;
+                  physics.velocity.x = walkSpeed * airSpeedCoef;
+                }
             }
           }
-          else {
-            currentImage = rightImage;
-            physics.velocity.x = walkSpeed * airSpeedCoef;
-          }
         }
-      }
 
       if (key == ' ' && physics.velocity.y == 0) {
         println("test jump");
