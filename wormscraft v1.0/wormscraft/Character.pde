@@ -5,6 +5,10 @@ class Charater extends GraObject {
   float xSizeBody = caseSize - 10;
   float ySizeBody = caseSize;
 
+  float walkSpeed = 0.1;
+  float jumpForce = 0.2;
+  float airSpeedCoef = 0.5;
+
   Consumable item;
   float  pv = 100;
   float armor  = 0;
@@ -15,7 +19,7 @@ class Charater extends GraObject {
   PImage leftImage;
   PImage rightImage;
   PImage waitImage;
-  
+
   PImage currentImage;
 
 
@@ -48,7 +52,7 @@ class Charater extends GraObject {
     rect(physics.position.x * caseSize, (physics.position.y - 1) * caseSize, xSizeHead, ySizeHead);
     fill(0, 255, 0);
     rect(physics.position.x * caseSize, physics.position.y * caseSize, xSizeBody, ySizeBody);
-    image(currentImage,physics.position.x * caseSize, (physics.position.y - 1) * caseSize, xSizeBody, ySizeBody *2 );
+    image(currentImage, physics.position.x * caseSize, (physics.position.y - 1) * caseSize, xSizeBody, ySizeBody *2 );
 
     //weapon.draw();
     if (item != null) {
@@ -71,20 +75,39 @@ class Charater extends GraObject {
             if ((game._map[(int) (physics.position.y)][(int) (physics.position.x)] == null))
             {
               currentImage = leftImage;
-              physics.velocity.x = -0.1;
+              physics.velocity.x = -walkSpeed;
             }
+          }
+          else {
+            currentImage = leftImage;
+            physics.velocity.x = -walkSpeed * airSpeedCoef;
           }
         }
       }
       if (key == 'd' || key == 'D' )
       {
-        if (!physics.hasGravity && (game._map[(int) (physics.position.y - 1)][(int) (physics.position.x + 1)] == null))
-        {
-          if ((game._map[(int) (physics.position.y)][(int) (physics.position.x + 1)] == null))
+        if (physics.position.x - 1 > 0 && physics.checkCollision(game._map[(int) physics.position.y][(int) physics.position.x]) == false) {
+          if (!physics.hasGravity && (game._map[(int) (physics.position.y - 1)][(int) (physics.position.x)] == null))
           {
-            currentImage = rightImage;
-            physics.velocity.x = 0.1;
+            if ((game._map[(int) (physics.position.y)][(int) (physics.position.x + 1)] == null))
+            {
+              currentImage = rightImage;
+              physics.velocity.x = walkSpeed;
+            }
           }
+          else {
+            currentImage = rightImage;
+            physics.velocity.x = walkSpeed * airSpeedCoef;
+          }
+        }
+      }
+
+      if (key == ' ' && physics.velocity.y == 0) {
+        println("test jump");
+        if ((game._map[(int) (physics.position.y - 1)][(int) (physics.position.x)] == null))
+        {
+          currentImage = rightImage;
+          physics.velocity.y = -0.2;
         }
       }
       /*
