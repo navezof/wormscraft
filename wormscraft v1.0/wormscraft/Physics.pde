@@ -163,7 +163,7 @@ class Physics
   
   void checkGround()
   {
-    if (position.y + 1 < game.getMapSizeY())
+    if (position.y + 1 < game.getMapSizeY() && position.x + 1 < game.getMapSizeX())
     {
       cube = (Cube) game._map[(int) position.y + 1][(int) position.x];
       cubeRight = (Cube) game._map[(int) position.y + 1][(int) position.x + 1];

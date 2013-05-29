@@ -93,7 +93,7 @@ class Charater extends GraObject {
       }
       if (key == 'd' || key == 'D' )
       {
-        if (physics.position.x + 1 < game._mapSizeX && physics.checkCollision(game._map[(int) physics.position.y][(int) physics.position.x + 1]) == false)
+        if (physics.position.x + 1 < game.getMapSizeX() && physics.checkCollision(game._map[(int) physics.position.y][(int) physics.position.x + 1]) == false)
           {
             if (!physics.hasGravity && physics.checkCollision(game._map[(int) (physics.position.y - 1)][(int) (physics.position.x + 1)]) == false)
             {
@@ -105,16 +105,19 @@ class Charater extends GraObject {
             }
             else
             {   
-               if ((game._map[(int) (physics.position.y)][(int) (physics.position.x)] == null) &&
-                (game._map[(int) (physics.position.y + 1)][(int) (physics.position.x)] == null) &&
-                (game._map[(int) (physics.position.y - 1)][(int) (physics.position.x)] == null) &&
-                (game._map[(int) (physics.position.y)][(int) (physics.position.x + 1)] == null) &&
-                (game._map[(int) (physics.position.y + 1)][(int) (physics.position.x + 1)] == null) &&
-                (game._map[(int) (physics.position.y - 1)][(int) (physics.position.x + 1)] == null))
-                {
-                  currentImage = rightImage;
-                  physics.velocity.x = walkSpeed * airSpeedCoef;
-                }
+              if (physics.position.y - 1 > 0 && physics.position.y + 1 < game.getMapSizeY() && physics.position.x - 1 > 0 && physics.position.x + 1 < game.getMapSizeX())
+              {
+                 if ((game._map[(int) (physics.position.y)][(int) (physics.position.x)] == null) &&
+                    (game._map[(int) (physics.position.y + 1)][(int) (physics.position.x)] == null) &&
+                    (game._map[(int) (physics.position.y - 1)][(int) (physics.position.x)] == null) &&
+                    (game._map[(int) (physics.position.y)][(int) (physics.position.x + 1)] == null) &&
+                    (game._map[(int) (physics.position.y + 1)][(int) (physics.position.x + 1)] == null) &&
+                    (game._map[(int) (physics.position.y - 1)][(int) (physics.position.x + 1)] == null))
+                  {
+                    currentImage = rightImage;
+                    physics.velocity.x = walkSpeed * airSpeedCoef;
+                  }
+              }
             }
           }
         }
