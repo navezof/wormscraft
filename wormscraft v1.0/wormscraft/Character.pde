@@ -1,5 +1,5 @@
 class Charater extends GraObject {
-  int TIMERDEFAULT = 300000;
+  int TIMERDEFAULT = 5000;
   float xSizeHead = caseSize - 10;
   float ySizeHead = caseSize;
   float xSizeBody = caseSize - 10;
@@ -28,8 +28,6 @@ class Charater extends GraObject {
   Charater(int x, int y) {
     item = new Pickaxe(this, 20);
     physics.position = new PVector(x, y);
-    println("x charac= " + x);
-    println("y charac= " + y);
     leftImage = loadImage("leftImage.png");
     rightImage = loadImage("rightImage.png");
     waitImage = loadImage("waitImage.png");
@@ -160,7 +158,9 @@ class Charater extends GraObject {
   }
 
   public void restartTimer() {
+    println("* Restart TImer");
     this.startTimer = millis();
+    this.timer = millis();
   }
 
   void update() {
@@ -182,10 +182,15 @@ class Charater extends GraObject {
     }
 
     this.timer = millis();
-    if (startTimer + TIMERDEFAULT <= this.timer) {
+    if (actif && this.timer >= startTimer + TIMERDEFAULT) {
+     println("---- Next Player Call");
       game.nextPlayerToPlay();
       actif = false;
     }
+  }
+
+  float getTimeRemaning() {
+   return 1 + ( startTimer + TIMERDEFAULT - this.timer) / 1000;
   }
 
   void onCollision(GraObject collider)

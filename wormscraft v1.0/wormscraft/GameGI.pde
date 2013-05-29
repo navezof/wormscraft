@@ -50,7 +50,7 @@ class GameGI {
   //TO UPDATE
   private float playerPv;
   private float playerArmor;
-  private Charater _currentPlayer;
+  public Charater _currentPlayer;
 
   /*
  **  TEAM BOX
@@ -65,13 +65,15 @@ class GameGI {
  **  TIME BOX
    */
   //STATIC
-  private int _timeBoxPosX;
-  private int _timeBoxPosY;
-  private int _timeBoxSizeX;
-  private int _timeBoxSizeY;
+  private int _timeBoxSizeX = 5 *  width / 100;
+  private int _timeBoxSizeY = 4 *  width / 100;
+  private int _timeBoxPosX = (50 * width / 100) - (_timeBoxSizeX / 2);
+  private int _timeBoxPosY = (int)(2.5 * width / 100) - (_timeBoxSizeY / 2);
 
   private long _lastTimer;
   private long _updateTimer = 500;
+
+  private PFont fontbgTime;
 
   GameGI(Game tr) {
     gui = loadImage("img/gui.png");
@@ -96,12 +98,14 @@ class GameGI {
     _team2 = gui.get(51, 0, 9, 10);
     _team2.resize(20, 20);
     font = createFont("Minecraftia.ttf", 14);
+    fontbgTime = createFont("Minecraftia.ttf", 16);
     this._myGame = tr;
     windMax = _myGame.windMaxSpeed;
     this.updateData();
   }
 
   public void updateData() {
+     
     _currentPlayer = _myGame.getCurrentCharacter();
     windPower = _myGame.getWind();
     _lastTimer = 0;
@@ -122,6 +126,7 @@ class GameGI {
     //display wind
     //
     fill(139);
+    strokeWeight(3);
     stroke(51);
 
     fill(198);
@@ -229,11 +234,16 @@ class GameGI {
       }
     }
 
+    //TIMER
+     textAlign(LEFT, BOTTOM);
+     fill(45);
+     textFont(fontbgTime, 17);
+     text((int)_currentPlayer.getTimeRemaning(), _timeBoxPosX + (_timeBoxSizeX / 2), _timeBoxSizeY);
+     fill(198);
+     textFont(font);
+     text((int)_currentPlayer.getTimeRemaning(), _timeBoxPosX + (_timeBoxSizeX / 2), _timeBoxSizeY);
 
-
-    //
-    //display time remaining
-    //
+     //rect(_timeBoxPosX - 5, _timeBoxPosY + 5, 5, 5);
     //display current weapon
     //display weapon inventory
     //display weapon inventory button

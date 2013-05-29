@@ -86,16 +86,18 @@ class Game {
       _map[mY]= new GraObject[map[mY].length];
       for (int mX = 0; mX < map[mY].length; mX++) {
         if (map[mY][mX] > 0) {
-          println("New cube in:  x=" + mX * caseWidth + " && y=" + mY * caseWidth);
           _map[mY][mX] = new Cube(mX, mY, map[mY][mX]);
         } 
         else if (map[mY][mX] == -1) {
-          println("New Player   X:" + mX + " Y:" + mY);
           Charater tmp = new Charater(mX, mY);
+          if (_currentTeam != 0 || _team.get(_currentTeam)._pl.size() > 0) {
+            setUpdate(tmp);
+          }
           _characters.add(tmp);
           _team.get(_currentTeam)._pl.add(tmp);
           _currentTeam++;
           _currentTeam = _currentTeam % _team.size();
+
         }
       }
     }
@@ -220,6 +222,7 @@ class Game {
     if (_currentTeam < this._team.size() && this._team.get(_currentTeam) != null && _currentCharacters < this._team.get(_currentTeam)._pl.size() && this._team.get(_currentTeam)._pl.get(_currentCharacters) != null) {
       return this._team.get(_currentTeam)._pl.get(_currentCharacters);
     } else {
+      println("getCurrentCharacter");
        nextPlayerToPlay();
     }
     return null;
@@ -235,7 +238,7 @@ class Game {
   public void newPlayer(Charater target, int teamId) {
     this._characters.add(target);
     if (teamId < _team.size()) {
-     _team.get(teamId)._pl.add(target); 
+     _team.get(teamId)._pl.add(target);
     }
   }
 
@@ -304,6 +307,9 @@ class Game {
   //Interaction with current team and current player.
 
   public void nextPlayerToPlay() {
+    println("Std ENTER");
+    println("_currentCharacters " + _currentCharacters);
+    println("_currentTeam " + _currentTeam);
     this._currentCharacters++;
     if (this._currentCharacters >= this._team.get(this._currentTeam)._pl.size()) {
       this._currentCharacters = 0;
@@ -319,7 +325,13 @@ class Game {
     }
     this.windInit();
     if (gui != null)
+     {
       gui.updateData();
+      gui._currentPlayer = this._team.get(_currentTeam)._pl.get(_currentCharacters);
+     }
+     println("Std OUT");
+     println("_currentCharacters " + _currentCharacters);
+     println("_currentTeam " + _currentTeam);
   }
 }
 
