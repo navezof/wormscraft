@@ -46,10 +46,11 @@ class Charater extends GraObject {
 
   void draw()
   {
-    fill(0, 0, 255);
+    /*fill(0, 0, 255);
     rect(physics.position.x * caseSize, (physics.position.y - 1) * caseSize, xSizeHead, ySizeHead);
     fill(0, 255, 0);
     rect(physics.position.x * caseSize, physics.position.y * caseSize, xSizeBody, ySizeBody);
+    */
     image(currentImage, physics.position.x * caseSize, (physics.position.y - 1) * caseSize, xSizeBody, ySizeBody *2 );
 
     //weapon.draw();
@@ -216,7 +217,7 @@ class Charater extends GraObject {
 
     super.update();
     physics.checkGround();
-    if (actif || tmpX != this.physics.position.x || tmpY != this.physics.position.y) {
+    if (actif || tmpX != this.physics.position.x || tmpY != this.physics.position.y || physics.velocity.x != 0 || physics.velocity.y != 0) {
       game.setUpdate(this);
     }
 
@@ -230,6 +231,8 @@ class Charater extends GraObject {
       game.nextPlayerToPlay();
       actif = false;
     }
+    //if (!actif && (physics.velocity.x != 0 || physics.velocity.y != 0))
+    //    game.setUpdate(this);
   }
 
   float getTimeRemaning() {
