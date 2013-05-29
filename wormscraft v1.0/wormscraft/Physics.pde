@@ -119,7 +119,7 @@ class Physics
         return (false);
       if (position.y * caseSize +  graObject.pHeight <= collider.physics.position.y * caseSize)
         return (false);
-      if (position.x * caseSize > collider.physics.position.x * caseSize + collider.pWidth)
+      if (position.x * caseSize >= collider.physics.position.x * caseSize + collider.pWidth)
         return (false);
       if (position.x * caseSize + graObject.pWidth <= collider.physics.position.x * caseSize)
         return (false);
@@ -163,7 +163,7 @@ class Physics
   
   void checkGround()
   {
-    if (position.y + 1 < game.getMapSizeY())
+    if (position.y + 1 < game.getMapSizeY() && position.x + 1 < game.getMapSizeX())
     {
       cube = (Cube) game._map[(int) position.y + 1][(int) position.x];
       cubeRight = (Cube) game._map[(int) position.y + 1][(int) position.x + 1];
