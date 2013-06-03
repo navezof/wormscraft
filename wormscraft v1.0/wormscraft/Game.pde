@@ -61,8 +61,10 @@ class Game {
   private GameGI gui;
   private boolean _partyOver;
   private int _endVisualEfect = 0;
+  public ItemShop itemShop;
   
   Game(int[][] map) {
+    itemShop = new ItemShop();
     _team = new ArrayList<Team>();
     _team.add(new Team("Team 1"));
     _team.add(new Team("Team 2"));

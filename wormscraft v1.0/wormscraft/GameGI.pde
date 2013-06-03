@@ -243,11 +243,8 @@ class GameGI {
      textFont(font);
      text((int)_currentPlayer.getTimeRemaning(), _timeBoxPosX + (_timeBoxSizeX / 2), _timeBoxSizeY);
 
-     //rect(_timeBoxPosX - 5, _timeBoxPosY + 5, 5, 5);
-    //display current weapon
-    //display weapon inventory
-    //display weapon inventory button
-    //display Exit button
+    if (_currentPlayer.inItemShop)
+      game.itemShop.display();
   }
 }
 

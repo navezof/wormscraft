@@ -22,7 +22,7 @@ class Charater extends GraObject {
 
   PImage currentImage;
 
-
+  private boolean inItemShop = false;
   public boolean actif = false;
   // Direction of the character 1 = right, -1 = left
   float direction;
@@ -65,6 +65,12 @@ class Charater extends GraObject {
     physics.velocity.x = 0;
     if (keyPressed)
     {
+      if (key == 'i') {
+        if (!inItemShop) {
+         inItemShop = true; 
+         game.itemShop.init();
+        }
+      }
       if (key == 'q' || key == 'Q')
       {
         if (physics.position.x - 1 > 0 && physics.position.y - 2 > 0 && (physics.checkCollision(game._map[(int) physics.position.y][(int) physics.position.x]) == false) && 
@@ -145,7 +151,11 @@ class Charater extends GraObject {
     }
     if (mousePressed)
     {
+      if (inItemShop) {
+       game.itemShop.update();   
+      } else {
       //weapon.charge(true);
+      }
     }
     else
     {
@@ -230,6 +240,7 @@ class Charater extends GraObject {
      println("---- Next Player Call");
       game.nextPlayerToPlay();
       actif = false;
+      inItemShop = false;
     }
     //if (!actif && (physics.velocity.x != 0 || physics.velocity.y != 0))
     //    game.setUpdate(this);
@@ -245,6 +256,11 @@ class Charater extends GraObject {
     {
       game.destroyPlayer(this);
     }
+  }
+  
+  void takeWeapon(int nb) {
+     //nb étant le numéro de l'arme par rapport à l'inventaire.
+    // TDla new weapon, ect... 
   }
 }
 
