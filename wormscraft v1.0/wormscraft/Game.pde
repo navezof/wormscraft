@@ -62,7 +62,11 @@ class Game {
   private boolean _partyOver;
   private int _endVisualEfect = 0;
   public ItemShop itemShop;
-  
+
+  public List<Charater> getCharacterList() {
+    return _characters;
+  }
+
   Game(int[][] map) {
     itemShop = new ItemShop();
     _team = new ArrayList<Team>();
@@ -91,7 +95,7 @@ class Game {
           _map[mY][mX] = new Cube(mX, mY, map[mY][mX]);
         } 
         else if (map[mY][mX] == -1) {
-          Charater tmp = new Charater(mX, mY);
+          Charater tmp = new Charater(mX, mY, 1);
           if (_currentTeam != 0 || _team.get(_currentTeam)._pl.size() > 0) {
             setUpdate(tmp);
           }
@@ -99,26 +103,25 @@ class Game {
           _team.get(_currentTeam)._pl.add(tmp);
           _currentTeam++;
           _currentTeam = _currentTeam % _team.size();
-
         }
       }
     }
     _team.add(new Team("Mob"));
     this.windInit();
     gui = new GameGI(this);
-     if (_currentTeam < this._team.size() && this._team.get(_currentTeam) != null && _currentCharacters < this._team.get(_currentTeam)._pl.size() && this._team.get(_currentTeam)._pl.get(_currentCharacters) != null) {
-         this._team.get(_currentTeam)._pl.get(_currentCharacters).actif = true;
-         this.setUpdate(this._team.get(_currentTeam)._pl.get(_currentCharacters));
-     }
+    if (_currentTeam < this._team.size() && this._team.get(_currentTeam) != null && _currentCharacters < this._team.get(_currentTeam)._pl.size() && this._team.get(_currentTeam)._pl.get(_currentCharacters) != null) {
+      this._team.get(_currentTeam)._pl.get(_currentCharacters).actif = true;
+      this.setUpdate(this._team.get(_currentTeam)._pl.get(_currentCharacters));
+    }
     /*
     * Testing
-    *
-    */
-    
+     *
+     */
+
     //Bullet bullet = new Bullet(2, 2, 0, 0);
     //newBullet(bullet);
     //setUpdate(bullet);
-    
+
     //_bullets.add(new Bullet(2, 2, 0, 0));
     //_nextUpdate.add(_bullets.get(0));
   }
@@ -126,9 +129,9 @@ class Game {
   public void update() {
     if (_partyOver) {
       if (mouseClick) {
-         game = null; 
+        game = null;
       }
-       return;
+      return;
     }
     // switch the Update list.
     ArrayList<GraObject> tmpList = this._currentUpdate;
@@ -140,20 +143,20 @@ class Game {
     this._deltaTime = (m - _lastTime) / 1000;
     this._lastTime = m;
 
-   //Clear _nextUpdate if no empty  
+    //Clear _nextUpdate if no empty  
     if (!this._nextUpdate.isEmpty()) {
       this._nextUpdate.clear();
     }
-    
+
     //Update current player
     if (!(_currentTeam < this._team.size() && this._team.get(_currentTeam) != null && _currentCharacters < this._team.get(_currentTeam)._pl.size() && this._team.get(_currentTeam)._pl.get(_currentCharacters) != null)) {
-       nextPlayerToPlay();
-       this._team.get(_currentTeam)._pl.get(_currentCharacters).update();
+      nextPlayerToPlay();
+      this._team.get(_currentTeam)._pl.get(_currentCharacters).update();
     }
-   
+
 
     //Foreach GraObject whose have to be update, current character, bullet, and co...
-    while (this._currentUpdate.size() > 0) {
+    while (this._currentUpdate.size () > 0) {
 
       this._currentUpdate.get(0).update();
       this._currentUpdate.remove(0);
@@ -201,7 +204,7 @@ class Game {
 
     //Draw HUD
     gui.draw();
-    
+
     //Game Over Screen
     if (_partyOver) {
       fill(0, 0, 0, _endVisualEfect);
@@ -220,12 +223,13 @@ class Game {
 
   public Charater getCurrentCharacter() {
     if (_team.get(0)._pl.size() == 0 || _team.get(1)._pl.size() == 0)
-       _partyOver = true;
+      _partyOver = true;
     if (_currentTeam < this._team.size() && this._team.get(_currentTeam) != null && _currentCharacters < this._team.get(_currentTeam)._pl.size() && this._team.get(_currentTeam)._pl.get(_currentCharacters) != null) {
       return this._team.get(_currentTeam)._pl.get(_currentCharacters);
-    } else {
+    } 
+    else {
       println("getCurrentCharacter");
-       nextPlayerToPlay();
+      nextPlayerToPlay();
     }
     return null;
   }
@@ -240,7 +244,7 @@ class Game {
   public void newPlayer(Charater target, int teamId) {
     this._characters.add(target);
     if (teamId < _team.size()) {
-     _team.get(teamId)._pl.add(target);
+      _team.get(teamId)._pl.add(target);
     }
   }
 
@@ -295,8 +299,8 @@ class Game {
       this._map[trgY][trgX] = target;
     }
   }
-  
-    public void removeMapCube(int trgX, int trgY) {
+
+  public void removeMapCube(int trgX, int trgY) {
     if (trgX > 0 && trgX < this._mapSizeX
       &&trgY > 0 && trgY < this._mapSizeY) {
       this._map[trgY][trgX] = null;
@@ -327,13 +331,13 @@ class Game {
     }
     this.windInit();
     if (gui != null)
-     {
+    {
       gui.updateData();
       gui._currentPlayer = this._team.get(_currentTeam)._pl.get(_currentCharacters);
-     }
-     println("Std OUT");
-     println("_currentCharacters " + _currentCharacters);
-     println("_currentTeam " + _currentTeam);
+    }
+    println("Std OUT");
+    println("_currentCharacters " + _currentCharacters);
+    println("_currentTeam " + _currentTeam);
   }
 }
 

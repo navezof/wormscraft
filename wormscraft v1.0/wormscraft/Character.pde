@@ -21,6 +21,7 @@ class Charater extends GraObject {
   PImage waitImage;
 
   PImage currentImage;
+  int nbTeam = 1;
 
   private boolean inItemShop = false;
   public boolean actif = false;
@@ -29,12 +30,20 @@ class Charater extends GraObject {
 
   Launcher weapon;
 
-  Charater(int x, int y) {
+  Charater(int x, int y, int team) {
     item = new Pickaxe(this, 20);
     physics.position = new PVector(x, y);
-    leftImage = loadImage("leftImage.png");
-    rightImage = loadImage("rightImage.png");
-    waitImage = loadImage("waitImage.png");
+    nbTeam = team;
+    if (nbTeam == 1) {
+      leftImage = loadImage("leftImage.png");
+      rightImage = loadImage("rightImage.png");
+      waitImage = loadImage("waitImage.png");
+    }
+    else {
+      leftImage = loadImage("leftImageOpp.png");
+      rightImage = loadImage("rightImageOpp.png");
+      waitImage = loadImage("waitImageOpp.png");
+    }
     physics.tag = "PLAYER";
 
     currentImage = waitImage;
@@ -47,10 +56,10 @@ class Charater extends GraObject {
   void draw()
   {
     /*fill(0, 0, 255);
-    rect(physics.position.x * caseSize, (physics.position.y - 1) * caseSize, xSizeHead, ySizeHead);
-    fill(0, 255, 0);
-    rect(physics.position.x * caseSize, physics.position.y * caseSize, xSizeBody, ySizeBody);
-    */
+     rect(physics.position.x * caseSize, (physics.position.y - 1) * caseSize, xSizeHead, ySizeHead);
+     fill(0, 255, 0);
+     rect(physics.position.x * caseSize, physics.position.y * caseSize, xSizeBody, ySizeBody);
+     */
     image(currentImage, physics.position.x * caseSize, (physics.position.y - 1) * caseSize, xSizeBody, ySizeBody *2 );
 
     //weapon.draw();
@@ -59,6 +68,76 @@ class Charater extends GraObject {
     }
   }
 
+  boolean moveLeft() {
+    if (physics.position.x - 1 > 0 && physics.position.y - 2 > 0 && (physics.checkCollision(game._map[(int) physics.position.y][(int) physics.position.x]) == false) && 
+      (physics.checkCollision(game._map[(int) physics.position.y - 2][(int) physics.position.x - 1]) == false))
+    {
+      if (!physics.hasGravity && physics.checkCollision(game._map[(int) (physics.position.y - 1)][(int) (physics.position.x)]) == false)
+      {
+        if (physics.checkCollision(game._map[(int) (physics.position.y)][(int) (physics.position.x)]) == false)
+        {
+          currentImage = leftImage;
+          physics.velocity.x = -walkSpeed;
+          return true;
+        }
+      }
+      else 
+      {
+        if ((game._map[(int) (physics.position.y)][(int) (physics.position.x - 1)] == null) &&
+          (game._map[(int) (physics.position.y + 1)][(int) (physics.position.x - 1)] == null)) /*&&
+        /*(game._map[(int) (physics.position.y - 1)][(int) (physics.position.x - 1)] == null)*/
+        {
+          currentImage = leftImage;
+          physics.velocity.x = -walkSpeed * airSpeedCoef;
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  boolean moveRight() {
+    if (physics.position.x + 1 < game.getMapSizeX() && physics.checkCollision(game._map[(int) physics.position.y][(int) physics.position.x + 1]) == false)
+    {
+      if (!physics.hasGravity && physics.checkCollision(game._map[(int) (physics.position.y - 1)][(int) (physics.position.x + 1)]) == false)
+      {
+        if (physics.checkCollision(game._map[(int) (physics.position.y)][(int) (physics.position.x + 1)]) == false)
+        {
+          currentImage = rightImage;
+          physics.velocity.x = walkSpeed;
+          return true;
+        }
+      }
+      else
+      {   
+        if (physics.position.y - 1 > 0 && physics.position.y + 1 < game.getMapSizeY() && physics.position.x - 1 > 0 && physics.position.x + 1 < game.getMapSizeX())
+        {
+          if ((game._map[(int) (physics.position.y)][(int) (physics.position.x)] == null) &&
+            (game._map[(int) (physics.position.y + 1)][(int) (physics.position.x)] == null) &&
+            (game._map[(int) (physics.position.y - 1)][(int) (physics.position.x)] == null) &&
+            (game._map[(int) (physics.position.y)][(int) (physics.position.x + 1)] == null) &&
+            (game._map[(int) (physics.position.y + 1)][(int) (physics.position.x + 1)] == null) &&
+            (game._map[(int) (physics.position.y - 1)][(int) (physics.position.x + 1)] == null))
+          {
+            currentImage = rightImage;
+            physics.velocity.x = walkSpeed * airSpeedCoef;
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  boolean jump() {
+    if ((game._map[(int) (physics.position.y - 1)][(int) (physics.position.x)] == null))
+    {
+      currentImage = rightImage;
+      physics.velocity.y = -0.2;
+      return true;
+    }
+    return false;
+  }
   void  getInput()
   {
     currentImage = waitImage;
@@ -67,73 +146,22 @@ class Charater extends GraObject {
     {
       if (key == 'i') {
         if (!inItemShop) {
-         inItemShop = true; 
-         game.itemShop.init();
+          inItemShop = true; 
+          game.itemShop.init();
         }
       }
       if (key == 'q' || key == 'Q')
       {
-        if (physics.position.x - 1 > 0 && physics.position.y - 2 > 0 && (physics.checkCollision(game._map[(int) physics.position.y][(int) physics.position.x]) == false) && 
-            (physics.checkCollision(game._map[(int) physics.position.y - 2][(int) physics.position.x - 1]) == false))
-        {
-          if (!physics.hasGravity && physics.checkCollision(game._map[(int) (physics.position.y - 1)][(int) (physics.position.x)]) == false)
-           {
-             if (physics.checkCollision(game._map[(int) (physics.position.y)][(int) (physics.position.x)]) == false)
-             {
-               currentImage = leftImage;
-               physics.velocity.x = -walkSpeed;
-             }
-           }
-          else 
-          {
-            if ((game._map[(int) (physics.position.y)][(int) (physics.position.x - 1)] == null) &&
-                (game._map[(int) (physics.position.y + 1)][(int) (physics.position.x - 1)] == null)) /*&&
-                /*(game._map[(int) (physics.position.y - 1)][(int) (physics.position.x - 1)] == null)*/
-            {
-              currentImage = leftImage;
-              physics.velocity.x = -walkSpeed * airSpeedCoef;
-            }
-          }
-        }
+        moveLeft();
       }
       if (key == 'd' || key == 'D' )
       {
-        if (physics.position.x + 1 < game.getMapSizeX() && physics.checkCollision(game._map[(int) physics.position.y][(int) physics.position.x + 1]) == false)
-          {
-            if (!physics.hasGravity && physics.checkCollision(game._map[(int) (physics.position.y - 1)][(int) (physics.position.x + 1)]) == false)
-            {
-              if (physics.checkCollision(game._map[(int) (physics.position.y)][(int) (physics.position.x + 1)]) == false)
-              {
-              currentImage = rightImage;
-              physics.velocity.x = walkSpeed;
-              }
-            }
-            else
-            {   
-              if (physics.position.y - 1 > 0 && physics.position.y + 1 < game.getMapSizeY() && physics.position.x - 1 > 0 && physics.position.x + 1 < game.getMapSizeX())
-              {
-                 if ((game._map[(int) (physics.position.y)][(int) (physics.position.x)] == null) &&
-                    (game._map[(int) (physics.position.y + 1)][(int) (physics.position.x)] == null) &&
-                    (game._map[(int) (physics.position.y - 1)][(int) (physics.position.x)] == null) &&
-                    (game._map[(int) (physics.position.y)][(int) (physics.position.x + 1)] == null) &&
-                    (game._map[(int) (physics.position.y + 1)][(int) (physics.position.x + 1)] == null) &&
-                    (game._map[(int) (physics.position.y - 1)][(int) (physics.position.x + 1)] == null))
-                  {
-                    currentImage = rightImage;
-                    physics.velocity.x = walkSpeed * airSpeedCoef;
-                  }
-              }
-            }
-          }
-        }
+        moveRight();
+      }
 
       if (key == ' ' && physics.velocity.y == 0) {
         println("test jump");
-        if ((game._map[(int) (physics.position.y - 1)][(int) (physics.position.x)] == null))
-        {
-          currentImage = rightImage;
-          physics.velocity.y = -0.2;
-        }
+        jump();
       }
       /*
          if (physics.checkCollision(game._map[(int) physics.position.y][(int) physics.position.x + 1]) == false)
@@ -152,9 +180,10 @@ class Charater extends GraObject {
     if (mousePressed)
     {
       if (inItemShop) {
-       game.itemShop.update();   
-      } else {
-      //weapon.charge(true);
+        game.itemShop.update();
+      } 
+      else {
+        //weapon.charge(true);
       }
     }
     else
@@ -237,7 +266,7 @@ class Charater extends GraObject {
 
     this.timer = millis();
     if (actif && this.timer >= startTimer + TIMERDEFAULT) {
-     println("---- Next Player Call");
+      println("---- Next Player Call");
       game.nextPlayerToPlay();
       actif = false;
       inItemShop = false;
@@ -247,7 +276,7 @@ class Charater extends GraObject {
   }
 
   float getTimeRemaning() {
-   return 1 + ( startTimer + TIMERDEFAULT - this.timer) / 1000;
+    return 1 + ( startTimer + TIMERDEFAULT - this.timer) / 1000;
   }
 
   void onCollision(GraObject collider)
@@ -257,10 +286,10 @@ class Charater extends GraObject {
       game.destroyPlayer(this);
     }
   }
-  
+
   void takeWeapon(int nb) {
-     //nb étant le numéro de l'arme par rapport à l'inventaire.
-    // TDla new weapon, ect... 
+    //nb étant le numéro de l'arme par rapport à l'inventaire.
+    // TDla new weapon, ect...
   }
 }
 
