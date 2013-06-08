@@ -5,6 +5,9 @@ class BasicAI extends Charater {
 
   boolean allowClimbing = false;
   Charater target = null;
+  PImage eggImage;
+  int sleepingTime = 2;
+
 
 
   void loadZombie() {
@@ -16,35 +19,49 @@ class BasicAI extends Charater {
     leftImage = loadImage("leftImageZombie.png");
     rightImage = loadImage("rightImageZombie.png");
     waitImage = loadImage("waitImageZombie.png");
+    eggImage = loadImage("eggZombie.png");
+      println("test Zombie");
   }
 
   BasicAI(int x, int y, int type) {
-    super(x, y, 1);
+    super(x, y, -1);
     if (type == 1)
       loadZombie();
+    currentImage = eggImage;
+  }
+
+  boolean sleep() {
+    sleepingTime--;
+    if (sleepingTime > 0) {
+      sleepingTime--;
+      currentImage = eggImage;
+      return true;
+    }
+    currentImage = waitImage;
+    return false;
   }
 
   void attack() {
     target.getDamage(5.0f);
     game.nextPlayerToPlay();
     actif = false;
-//    inItemShop = false;
+    //    inItemShop = false;
   }
 
   void getInput() {
-    if (target != null) {
+    if (target != null && !sleep()) {
       if (this.physics.position.x > target.physics.position.x && PVector.dist(this.physics.position, target.physics.position) > 1)
         moveLeft();
       else if (this.physics.position.x < target.physics.position.x && PVector.dist(this.physics.position, target.physics.position) > 1)
         moveRight();
       else if (PVector.dist(this.physics.position, target.physics.position) <= 1)
         attack();
-        else
-        jump();
     }
   }
 
   void update() {
+
+    println("test Zombie");
     if (actif) {
       findTarget();
       super.update();
@@ -69,5 +86,17 @@ class BasicAI extends Charater {
       }
     }
   }
+  void draw()
+  {
+    if (sleepingTime > 0)
+      image(currentImage, physics.position.x * caseSize, (physics.position.y) * caseSize, xSizeBody, ySizeBody );
+    else
+      image(currentImage, physics.position.x * caseSize, (physics.position.y - 1) * caseSize, xSizeBody, ySizeBody * 2 );
+    //weapon.draw();
+    if (item != null) {
+      item.draw();
+    }
+  }
+  
 }
 

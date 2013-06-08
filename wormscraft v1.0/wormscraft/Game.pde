@@ -67,11 +67,18 @@ class Game {
     return _characters;
   }
 
+  public void addNPC(Charater npc) {
+      setUpdate(npc);
+    _characters.add(npc);
+    _team.get(2)._pl.add(npc);
+  }
+
   Game(int[][] map) {
     itemShop = new ItemShop();
     _team = new ArrayList<Team>();
     _team.add(new Team("Team 1"));
     _team.add(new Team("Team 2"));
+    _team.add(new Team("NPC"));
     _partyOver = false;
     _characters = new ArrayList<Charater>();
     _items = new ArrayList<GraObject>();
@@ -102,7 +109,7 @@ class Game {
           _characters.add(tmp);
           _team.get(_currentTeam)._pl.add(tmp);
           _currentTeam++;
-          _currentTeam = _currentTeam % _team.size();
+          _currentTeam = _currentTeam % (_team.size() - 1);
         }
       }
     }

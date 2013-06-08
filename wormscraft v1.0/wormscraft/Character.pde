@@ -39,7 +39,7 @@ class Charater extends GraObject {
       rightImage = loadImage("rightImage.png");
       waitImage = loadImage("waitImage.png");
     }
-    else {
+    else if (nbTeam == 2) {
       leftImage = loadImage("leftImageOpp.png");
       rightImage = loadImage("rightImageOpp.png");
       waitImage = loadImage("waitImageOpp.png");
@@ -179,6 +179,8 @@ class Charater extends GraObject {
     }
     if (mousePressed)
     {
+      BasicAI test = new BasicAI((int)this.physics.position.x + 1, (int)this.physics.position.y, 1);
+      game.addNPC(test);
       if (inItemShop) {
         game.itemShop.update();
       } 
