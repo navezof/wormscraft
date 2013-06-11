@@ -76,6 +76,7 @@ class Physics
     for (int i = 0; i < game._characters.size() ; i++)
     {
       GraObject charac = game._characters.get(i);
+      
       if (charac != graObject)
       {
         if (checkCollision(charac))

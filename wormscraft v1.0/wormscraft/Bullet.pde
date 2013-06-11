@@ -1,5 +1,5 @@
 class Bullet extends GraObject
-{
+{ 
   float power;
   float angle;
 
@@ -22,7 +22,7 @@ class Bullet extends GraObject
 
   void update()
   {
-    println("update bullet");
+    //println("update bullet");
     game.setUpdate(this);
     super.update();
   }
@@ -36,13 +36,20 @@ class Bullet extends GraObject
     super.draw();
   }
   
+  void draw(float x, float y)
+  {
+     fill(150);
+     rect(x, y, pWidth, pHeight);
+  }
+  
   public void onCollision(GraObject collider)
   {
     println("bullet collision");  
     if (collider.physics.tag == "GROUND")
       game.destroyBullet(this);
     if (collider.physics.tag == "PLAYER")
-      game.destroyBullet(this);
+        game.destroyBullet(this);
   }
 }
+
 
