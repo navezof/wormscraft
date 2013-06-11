@@ -135,6 +135,10 @@ class Launcher extends GraObject
     {
         return (new Bomb(aimPosx / caseSize, aimPosy / caseSize, angle, power));
     }
+    else if (currentWeaponIndex == 5)
+    {
+      return (new ZombieBomb(aimPosx / caseSize, aimPosy / caseSize, angle, power));
+    }
     else
     {
       println("The weapon ; " + currentWeaponIndex + " doesn't exist");
@@ -152,6 +156,10 @@ class Launcher extends GraObject
     else if (currentWeaponIndex == 1)
     {
         currentWeapon = (new Bomb(aimPosx / caseSize, aimPosy / caseSize, angle, power));
+    }
+    else if (currentWeaponIndex == 5)
+    {
+      currentWeapon = (new ZombieBomb(aimPosx / caseSize, aimPosy / caseSize, angle, power));
     }
     else
     {

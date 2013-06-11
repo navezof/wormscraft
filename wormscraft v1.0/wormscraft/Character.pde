@@ -50,7 +50,7 @@ class Charater extends GraObject {
     pWidth = xSizeBody;
     pHeight = 32;
 
-    weapon = new Launcher(x, y);
+    weapon = new Launcher(this, x, y);
   }
 
   void draw()
@@ -62,7 +62,7 @@ class Charater extends GraObject {
      */
     image(currentImage, physics.position.x * caseSize, (physics.position.y - 1) * caseSize, xSizeBody, ySizeBody *2 );
 
-    //weapon.draw();
+    weapon.draw();
     if (item != null) {
       item.draw();
     }
@@ -179,13 +179,13 @@ class Charater extends GraObject {
     }
     if (mousePressed)
     {
-      BasicAI test = new BasicAI((int)this.physics.position.x + 1, (int)this.physics.position.y, 1);
-      game.addNPC(test);
+      //BasicAI test = new BasicAI((int)this.physics.position.x + 1, (int)this.physics.position.y, 1);
+      //game.addNPC(test);
       if (inItemShop) {
         game.itemShop.update();
       } 
       else {
-        //weapon.charge(true);
+        weapon.charge(true);
       }
     }
     else
@@ -289,7 +289,9 @@ class Charater extends GraObject {
     }
   }
 
-  void takeWeapon(int nb) {
+  void takeWeapon(int nb)
+  {
+    weapon.equipWeapon(nb);
     //nb étant le numéro de l'arme par rapport à l'inventaire.
     // TDla new weapon, ect...
   }
