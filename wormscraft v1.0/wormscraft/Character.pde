@@ -55,11 +55,6 @@ class Charater extends GraObject {
 
   void draw()
   {
-    /*fill(0, 0, 255);
-     rect(physics.position.x * caseSize, (physics.position.y - 1) * caseSize, xSizeHead, ySizeHead);
-     fill(0, 255, 0);
-     rect(physics.position.x * caseSize, physics.position.y * caseSize, xSizeBody, ySizeBody);
-     */
     image(currentImage, physics.position.x * caseSize, (physics.position.y - 1) * caseSize, xSizeBody, ySizeBody *2 );
 
     weapon.draw();
@@ -84,8 +79,7 @@ class Charater extends GraObject {
       else 
       {
         if ((game._map[(int) (physics.position.y)][(int) (physics.position.x - 1)] == null) &&
-          (game._map[(int) (physics.position.y + 1)][(int) (physics.position.x - 1)] == null)) /*&&
-        /*(game._map[(int) (physics.position.y - 1)][(int) (physics.position.x - 1)] == null)*/
+          (game._map[(int) (physics.position.y + 1)][(int) (physics.position.x - 1)] == null))
         {
           currentImage = leftImage;
           physics.velocity.x = -walkSpeed * airSpeedCoef;
@@ -163,24 +157,9 @@ class Charater extends GraObject {
         println("test jump");
         jump();
       }
-      /*
-         if (physics.checkCollision(game._map[(int) physics.position.y][(int) physics.position.x + 1]) == false)
-       {
-       if (physics.hasGravity && (physics.checkCollision(game._map[(int) physics.position.y + 1][(int) physics.position.x + 1]) == false) &&
-       (physics.checkCollision(game._map[(int) physics.position.y - 1][(int) physics.position.x + 1]) == false))
-       {
-       physics.velocity.x = 0.1;
-       }
-       else
-       physics.velocity.x = 0.1; 
-       }      
-       }
-       */
     }
     if (mousePressed)
     {
-      //BasicAI test = new BasicAI((int)this.physics.position.x + 1, (int)this.physics.position.y, 1);
-      //game.addNPC(test);
       if (inItemShop) {
         game.itemShop.update();
       } 
@@ -193,7 +172,7 @@ class Charater extends GraObject {
       weapon.charge(false);
     }
 
-    text(  physics.position.x + " \n" +  physics.position. y, physics.position.x + 100, physics.position.y + 100 + ySizeHead * 2);
+    text(physics.position.x + " \n" +  physics.position. y, physics.position.x + 100, physics.position.y + 100 + ySizeHead * 2);
   }
 
   void healPv(float heal) {
@@ -220,6 +199,8 @@ class Charater extends GraObject {
     else {
       armor -= damage;
     }
+    if (pv <= 0)
+      game.destroyPlayer(this);
   }
 
   public float getXPos() {
@@ -285,7 +266,7 @@ class Charater extends GraObject {
   {
     if (collider.physics.tag == "BULLET")
     {
-      game.destroyPlayer(this);
+      //game.destroyPlayer(this);
     }
   }
 

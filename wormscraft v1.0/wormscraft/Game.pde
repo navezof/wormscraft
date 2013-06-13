@@ -120,17 +120,6 @@ class Game {
       this._team.get(_currentTeam)._pl.get(_currentCharacters).actif = true;
       this.setUpdate(this._team.get(_currentTeam)._pl.get(_currentCharacters));
     }
-    /*
-    * Testing
-     *
-     */
-
-    //Bullet bullet = new Bullet(2, 2, 0, 0);
-    //newBullet(bullet);
-    //setUpdate(bullet);
-
-    //_bullets.add(new Bullet(2, 2, 0, 0));
-    //_nextUpdate.add(_bullets.get(0));
   }
 
   public void update() {
@@ -316,6 +305,11 @@ class Game {
 
   public float getWind() {
     return this._wind.x;
+  }
+  
+  public boolean isInventoryOpen()
+  {
+    return (gui._isInventoryOpen);
   }
   //Interaction with current team and current player.
 

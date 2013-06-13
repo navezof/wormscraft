@@ -42,7 +42,7 @@ class Launcher extends GraObject
     pWidth = 32;
     pHeight = 10;
     
-    equipWeapon(0);
+    equipWeapon(9);
   }
 
   void update(float x, float y)
@@ -93,26 +93,29 @@ class Launcher extends GraObject
 
   void charge(boolean mouseDownClicked)
   {
-    mouseDown = mouseDownClicked;
-    if (mouseDown)
+    if (game.isInventoryOpen() == false)
     {
-      if (power < maxPower)
-        power += powerLoadingSpeed;
-      ready = true;
-    }
-    else
-    {
-      if (ready)
-        shoot();
-      if (power > 0)
-        power -= powerLoadingSpeed;
-      ready = false;
+      mouseDown = mouseDownClicked;
+      if (mouseDown)
+      {
+        if (power < maxPower)
+          power += powerLoadingSpeed;
+        ready = true;
+      }
+      else
+      {
+        if (ready && power > 10)
+          shoot();
+        if (power > 0)
+          power -= powerLoadingSpeed;
+        ready = false;
+      }
     }
   }
   
   void shoot()
   {
-    if (owner.actif == true)
+    if (owner.actif == true && game.isInventoryOpen() == false)
     {
       mouseDown = false;
       
@@ -122,26 +125,33 @@ class Launcher extends GraObject
         game.newBullet(bullet);
         game.setUpdate(bullet);
       }
+      game.nextPlayerToPlay();
+      owner.actif = false;
+      owner.inItemShop = false;
+      power = 0;
     }
   }
  
   Bullet createBullet()
   {
-    if (currentWeaponIndex == 0)
+    switch (currentWeaponIndex)
     {
+      case (5):
+        println("Zombie selected");
+        return (new ZombieBomb(aimPosx / caseSize, aimPosy / caseSize, angle, power));
+      case (9):
+        println("Bow selected");
         return (new Bullet(aimPosx / caseSize, aimPosy / caseSize, angle, power));
-    }
-    else if (currentWeaponIndex == 1)
-    {
+      case (10):
+        println("Fireball selected");
+        return (new Fireball(aimPosx / caseSize, aimPosy / caseSize, angle, power));
+        /*
+      case (18):
+        println("Bomb selected");
         return (new Bomb(aimPosx / caseSize, aimPosy / caseSize, angle, power));
-    }
-    else if (currentWeaponIndex == 5)
-    {
-      return (new ZombieBomb(aimPosx / caseSize, aimPosy / caseSize, angle, power));
-    }
-    else
-    {
-      println("The weapon ; " + currentWeaponIndex + " doesn't exist");
+        */
+      default:
+         println("The weapon ; " + currentWeaponIndex + " doesn't exist");
     }
     return (null);
   }
@@ -149,21 +159,29 @@ class Launcher extends GraObject
   void equipWeapon(int nb)
   {
     currentWeaponIndex = nb;
-    if (currentWeaponIndex == 0)
+    switch (currentWeaponIndex)
     {
+      case (5):
+        println("Zombie selected");
+        currentWeapon = (new ZombieBomb(aimPosx / caseSize, aimPosy / caseSize, angle, power));
+        break;
+      case (9):
+        println("Bow selected");
         currentWeapon = (new Bullet(aimPosx / caseSize, aimPosy / caseSize, angle, power));
-    }
-    else if (currentWeaponIndex == 1)
-    {
+        break;
+      case (10):
+        println("Fireball selected");
+        currentWeapon = (new Fireball(aimPosx / caseSize, aimPosy / caseSize, angle, power));
+        break;
+        /*
+      case (18):
+        println("Bomb selected");
         currentWeapon = (new Bomb(aimPosx / caseSize, aimPosy / caseSize, angle, power));
-    }
-    else if (currentWeaponIndex == 5)
-    {
-      currentWeapon = (new ZombieBomb(aimPosx / caseSize, aimPosy / caseSize, angle, power));
-    }
-    else
-    {
-      println("The weapon ; " + currentWeaponIndex + " doesn't exist");
+        break;
+        */
+      default:
+         println("The weapon ; " + currentWeaponIndex + " doesn't exist");
+         break;   
     }
   }
 }

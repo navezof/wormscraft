@@ -19,6 +19,10 @@ class GraObject
   {
   }
   
+  void getDamage(float damage)
+  {
+  }
+  
   public void onCollision(GraObject collider)
   {
   }

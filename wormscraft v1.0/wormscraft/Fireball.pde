@@ -1,8 +1,6 @@
-class Bomb extends Bullet
+class Fireball extends Bullet
 {
-  int aeraEffect = 1;
-  
-  Bomb(float x, float y, float _angle, float _power)
+  Fireball(float x, float y, float _angle, float _power)
   {
     super(x, y, _angle, _power);
   }
@@ -16,7 +14,7 @@ class Bomb extends Bullet
   {
     fill(255, 0, 0);
     
-    rect(physics.position.x * caseSize, physics.position.y * caseSize, 20, 20);
+    ellipse(physics.position.x * caseSize, physics.position.y * caseSize, pWidth, pHeight);
 
     //super.draw();
   }
@@ -25,7 +23,7 @@ class Bomb extends Bullet
   {
      fill(255, 0, 0);
 
-     rect(x, y, 20, 20);
+     ellipse(x, y, pWidth, pHeight);
   }
  
   public void onCollision(GraObject collider)
@@ -34,8 +32,6 @@ class Bomb extends Bullet
     {
       game.destroyBullet(this);
       game.removeMapCube((int )collider.physics.position.x, (int) collider.physics.position.y);
-      game.removeMapCube((int )collider.physics.position.x - 1, (int) collider.physics.position.y);
-      game.removeMapCube((int )collider.physics.position.x + 1, (int) collider.physics.position.y);
     }
     if (collider.physics.tag == "PLAYER")
     {
@@ -43,4 +39,5 @@ class Bomb extends Bullet
       game.destroyBullet(this);
     }
   }
+  
 }
