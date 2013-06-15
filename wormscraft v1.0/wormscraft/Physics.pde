@@ -88,6 +88,23 @@ class Physics
     }
   }
 
+  GraObject detectCharacterCollisionInPosition(int x, int y)
+  {
+    for (int i = 0; i < game._characters.size() ; i++)
+    {
+      GraObject charac = game._characters.get(i);
+      
+      println("Is there a character in " + x + " / " + y);
+      println("Testing : " + charac.physics.position.x + " / " + charac.physics.position.y);
+      if ((int) charac.physics.position.x == x && (int) charac.physics.position.y == y)
+      {
+        print("TOUCH");
+        return (charac);
+      }
+    }
+    return (null);
+  }
+
   void detectCollision()
   {
     float dx;

@@ -1,6 +1,6 @@
 class Bomb extends Bullet
 {
-  int aeraEffect = 1;
+  int bombDamage = 50;
   
   Bomb(float x, float y, float _angle, float _power)
   {
@@ -33,14 +33,33 @@ class Bomb extends Bullet
     if (collider.physics.tag == "GROUND")
     {
       game.destroyBullet(this);
-      game.removeMapCube((int )collider.physics.position.x, (int) collider.physics.position.y);
-      game.removeMapCube((int )collider.physics.position.x - 1, (int) collider.physics.position.y);
-      game.removeMapCube((int )collider.physics.position.x + 1, (int) collider.physics.position.y);
+      GraObject tmp_charac;
+      
+      for (int tx = (int) collider.physics.position.x - 1; tx < (int) collider.physics.position.x + 1; tx++)
+      {
+        for (int ty = (int) collider.physics.position.y - 1; ty < (int) collider.physics.position.y + 1; ty++)
+        {
+          game.removeMapCube(tx, ty);
+          if ((tmp_charac = collider.physics.detectCharacterCollisionInPosition(tx, ty)) != null)
+            tmp_charac.getDamage(bombDamage);
+        }
+      }
     }
     if (collider.physics.tag == "PLAYER")
     {
-      collider.getDamage(40);
+      collider.getDamage(100);
       game.destroyBullet(this);
+      
+      GraObject tmp_charac;
+      for (int tx = (int) collider.physics.position.x - 1; tx < (int) collider.physics.position.x + 1; tx++)
+      {
+        for (int ty = (int) collider.physics.position.y - 1; ty < (int) collider.physics.position.y + 1; ty++)
+        {
+          game.removeMapCube(tx, ty);
+          if ((tmp_charac = collider.physics.detectCharacterCollisionInPosition(tx, ty)) != null)
+            tmp_charac.getDamage(bombDamage);
+        }
+      }
     }
   }
 }

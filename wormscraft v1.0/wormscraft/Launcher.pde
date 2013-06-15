@@ -104,7 +104,7 @@ class Launcher extends GraObject
       }
       else
       {
-        if (ready && power > 10)
+        if (ready && power > 20)
           shoot();
         if (power > 0)
           power -= powerLoadingSpeed;
@@ -145,11 +145,9 @@ class Launcher extends GraObject
       case (10):
         println("Fireball selected");
         return (new Fireball(aimPosx / caseSize, aimPosy / caseSize, angle, power));
-        /*
       case (18):
         println("Bomb selected");
         return (new Bomb(aimPosx / caseSize, aimPosy / caseSize, angle, power));
-        */
       default:
          println("The weapon ; " + currentWeaponIndex + " doesn't exist");
     }
@@ -173,12 +171,10 @@ class Launcher extends GraObject
         println("Fireball selected");
         currentWeapon = (new Fireball(aimPosx / caseSize, aimPosy / caseSize, angle, power));
         break;
-        /*
       case (18):
         println("Bomb selected");
         currentWeapon = (new Bomb(aimPosx / caseSize, aimPosy / caseSize, angle, power));
         break;
-        */
       default:
          println("The weapon ; " + currentWeaponIndex + " doesn't exist");
          break;   
