@@ -145,9 +145,15 @@ class Launcher extends GraObject
       case (10):
         println("Fireball selected");
         return (new Fireball(aimPosx / caseSize, aimPosy / caseSize, angle, power));
+      case (14):
+        println("EnderBomb selected");
+        return (new EndermanBomb(aimPosx / caseSize, aimPosy / caseSize, angle, power));
       case (18):
         println("Bomb selected");
         return (new Bomb(aimPosx / caseSize, aimPosy / caseSize, angle, power));
+      case (23):
+        println("CreeperBomb selected");
+        return(new CreeperBomb(aimPosx / caseSize, aimPosy / caseSize, angle, power));
       default:
          println("The weapon ; " + currentWeaponIndex + " doesn't exist");
     }
@@ -170,6 +176,14 @@ class Launcher extends GraObject
       case (10):
         println("Fireball selected");
         currentWeapon = (new Fireball(aimPosx / caseSize, aimPosy / caseSize, angle, power));
+        break;
+      case (14):
+        println("EnderBomb selected");
+        currentWeapon = (new EndermanBomb(aimPosx / caseSize, aimPosy / caseSize, angle, power));
+        break;
+       case (23):
+        println("CreeperBomb selected");
+        currentWeapon = (new CreeperBomb(aimPosx / caseSize, aimPosy / caseSize, angle, power));
         break;
       case (18):
         println("Bomb selected");

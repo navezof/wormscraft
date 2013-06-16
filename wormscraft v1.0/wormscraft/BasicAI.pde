@@ -42,7 +42,6 @@ class BasicAI extends Charater {
     rightImage = loadImage("rightImageZombie.png");
     waitImage = loadImage("waitImageZombie.png");
     eggImage = loadImage("eggZombie.png");
-    println("test Zombie");
   }
 
   BasicAI(int x, int y, int type) {
