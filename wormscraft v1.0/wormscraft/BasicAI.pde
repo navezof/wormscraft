@@ -8,7 +8,29 @@ class BasicAI extends Charater {
   PImage eggImage;
   int sleepingTime = 2;
 
+  void loadCreeper() {
+    loadCreeperImage();
+  }
 
+
+  void loadCreeperImage() {
+    leftImage = loadImage("CreeperSide.png");
+    rightImage = loadImage("CreeperSide.png");
+    waitImage = loadImage("CreeperWait.png");
+    eggImage = loadImage("eggCreeper.png");
+  }
+
+  void loadEnderMan() {
+    loadEnderManImage();
+  }
+
+
+  void loadEnderManImage() {
+    leftImage = loadImage("EnderMan.png");
+    rightImage = loadImage("EnderMan.png");
+    waitImage = loadImage("EnderMan.png");
+    eggImage = loadImage("eggEnderMan.png");
+  }
 
   void loadZombie() {
     loadZombieImage();
@@ -20,13 +42,17 @@ class BasicAI extends Charater {
     rightImage = loadImage("rightImageZombie.png");
     waitImage = loadImage("waitImageZombie.png");
     eggImage = loadImage("eggZombie.png");
-      println("test Zombie");
+    println("test Zombie");
   }
 
   BasicAI(int x, int y, int type) {
     super(x, y, -1);
     if (type == 1)
       loadZombie();
+    if (type == 2)
+      loadCreeper();
+    if (type == 3)
+      loadEnderMan();
     currentImage = eggImage;
   }
 
@@ -97,6 +123,5 @@ class BasicAI extends Charater {
       item.draw();
     }
   }
-  
 }
 
