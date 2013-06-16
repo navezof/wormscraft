@@ -1,11 +1,11 @@
-class Pickaxe extends Bullet
+class Sword extends Bullet
 {
   float initX;
   float initY;
   float po;
 
 
-  Pickaxe(float x, float y, float _angle, float _power, float powa)
+  Sword (float x, float y, float _angle, float _power, float powa)
   {
     super(x, y, _angle, _power);
     po = powa;
@@ -25,7 +25,7 @@ class Pickaxe extends Bullet
   void draw(float x, float y)
   {
     float myDist = ((x + y) - (initX + initY));
-    if (myDist < -1 || myDist > 1)
+    if (myDist < -0.5 || myDist > 0.5)
       game.destroyBullet(this);
   }
  
@@ -34,11 +34,11 @@ class Pickaxe extends Bullet
     if (collider.physics.tag == "GROUND")
     {
       game.destroyBullet(this);
-      game.removeMapCube((int )collider.physics.position.x, (int) collider.physics.position.y);
-      if (po > 1)
-        game.removeMapCube((int )collider.physics.position.x + 1, (int) collider.physics.position.y);
-      if (po > 2)
-        game.removeMapCube((int )collider.physics.position.x + 1, (int) collider.physics.position.y + 1);
+    }
+    if (collider.physics.tag == "PLAYER")
+    {
+      collider.getDamage(po * 15);
+      game.destroyBullet(this);
     }
   }  
 }

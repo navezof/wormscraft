@@ -23,7 +23,7 @@ class Charater extends GraObject {
   PImage currentImage;
   int nbTeam = 1;
 
-  private boolean inItemShop = false;
+  public boolean inItemShop = false;
   public boolean actif = false;
   // Direction of the character 1 = right, -1 = left
   float direction;
@@ -31,7 +31,6 @@ class Charater extends GraObject {
   Launcher weapon;
 
   Charater(int x, int y, int team) {
-    item = new Pickaxe(this, 20);
     physics.position = new PVector(x, y);
     nbTeam = team;
     if (nbTeam == 1) {
@@ -175,7 +174,7 @@ class Charater extends GraObject {
     text(physics.position.x + " \n" +  physics.position. y, physics.position.x + 100, physics.position.y + 100 + ySizeHead * 2);
   }
 
-  void healPv(float heal) {
+  public void healPv(float heal) {
     pv += heal;
     if (pv > 100) {
       pv = 100;

@@ -136,9 +136,20 @@ class Launcher extends GraObject
   {
     switch (currentWeaponIndex)
     {
+      case (0):
+        return (new Sword(aimPosx / caseSize, aimPosy / caseSize, angle, power, 3));
+      case (1):
+        game.newBullet((new Sword(aimPosx / caseSize, aimPosy / caseSize, angle, power, 1)));
+        return (new Sword(aimPosx / caseSize, aimPosy / caseSize, angle, power, 1));
       case (5):
         println("Zombie selected");
         return (new ZombieBomb(aimPosx / caseSize, aimPosy / caseSize, angle, power));
+      case (7):
+        return (new Pickaxe(aimPosx / caseSize, aimPosy / caseSize, angle, power, 3));
+      case (16):
+        return (new Pickaxe(aimPosx / caseSize, aimPosy / caseSize, angle, power, 2));
+      case (25):
+        return (new Pickaxe(aimPosx / caseSize, aimPosy / caseSize, angle, power, 1));
       case (9):
         println("Bow selected");
         return (new Bullet(aimPosx / caseSize, aimPosy / caseSize, angle, power));
@@ -163,8 +174,15 @@ class Launcher extends GraObject
   void equipWeapon(int nb)
   {
     currentWeaponIndex = nb;
+      println("Weapon nb: " + nb);
     switch (currentWeaponIndex)
     {
+      case (3):
+        println("Gold apple");
+        owner.healPv(50);
+        owner.actif = false;
+        owner.inItemShop = false;        
+        game.nextPlayerToPlay();
       case (5):
         println("Zombie selected");
         currentWeapon = (new ZombieBomb(aimPosx / caseSize, aimPosy / caseSize, angle, power));
@@ -177,6 +195,12 @@ class Launcher extends GraObject
         println("Fireball selected");
         currentWeapon = (new Fireball(aimPosx / caseSize, aimPosy / caseSize, angle, power));
         break;
+      case (11):
+        println("Food");
+        owner.healPv(25);
+        owner.actif = false;
+        owner.inItemShop = false;        
+        game.nextPlayerToPlay();
       case (14):
         println("EnderBomb selected");
         currentWeapon = (new EndermanBomb(aimPosx / caseSize, aimPosy / caseSize, angle, power));
@@ -189,6 +213,12 @@ class Launcher extends GraObject
         println("Bomb selected");
         currentWeapon = (new Bomb(aimPosx / caseSize, aimPosy / caseSize, angle, power));
         break;
+      case (19):
+        println("Food");
+        owner.healPv(10);
+        owner.actif = false;
+        owner.inItemShop = false;        
+        game.nextPlayerToPlay();
       default:
          println("The weapon ; " + currentWeaponIndex + " doesn't exist");
          break;   
