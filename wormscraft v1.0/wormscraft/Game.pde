@@ -102,7 +102,7 @@ class Game {
           _map[mY][mX] = new Cube(mX, mY, map[mY][mX]);
         } 
         else if (map[mY][mX] == -1) {
-          Charater tmp = new Charater(mX, mY, 1);
+          Charater tmp = new Charater(mX, mY, _currentTeam + 1);
           if (_currentTeam != 0 || _team.get(_currentTeam)._pl.size() > 0) {
             setUpdate(tmp);
           }

@@ -1,5 +1,5 @@
 class Charater extends GraObject {
-  int TIMERDEFAULT = 5000;
+  int TIMERDEFAULT = 10000;
   float xSizeHead = caseSize - 10;
   float ySizeHead = caseSize;
   float xSizeBody = caseSize - 10;
@@ -63,6 +63,15 @@ class Charater extends GraObject {
   }
 
   boolean moveLeft() {
+    if ( physics.position.y > game._map.length  || physics.position.y < 0f)
+      {
+       game.nextPlayerToPlay();
+       actif = false;
+       inItemShop = false;
+       game.destroyPlayer(this);
+       return false; 
+      }
+      
     if (physics.position.x - 1 > 0 && physics.position.y - 2 > 0 && (physics.checkCollision(game._map[(int) physics.position.y][(int) physics.position.x]) == false) && 
       (physics.checkCollision(game._map[(int) physics.position.y - 2][(int) physics.position.x - 1]) == false))
     {
@@ -90,6 +99,16 @@ class Charater extends GraObject {
   }
 
   boolean moveRight() {
+    if ( physics.position.y > game._map.length  || physics.position.y < 0f)
+      {
+       game.nextPlayerToPlay();
+       actif = false;
+       inItemShop = false;
+       game.destroyPlayer(this);
+       return false; 
+      }
+
+      
     if (physics.position.x + 1 < game.getMapSizeX() && physics.checkCollision(game._map[(int) physics.position.y][(int) physics.position.x + 1]) == false)
     {
       if (!physics.hasGravity && physics.checkCollision(game._map[(int) (physics.position.y - 1)][(int) (physics.position.x + 1)]) == false)

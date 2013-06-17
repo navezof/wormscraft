@@ -8,10 +8,11 @@ class MainMenu {
   private int _yMapButton;
   private int _xSizeMapButton;
   private int _ySizeMapButton;
+  PImage home;
 
   MainMenu() {
     File mapFolder = new File(dataPath("map"));
-
+    home = loadImage("./img/Wormcraft.jpg");
     if (!mapFolder.exists()) {
        println("Error: Folder ./map/ not found");
        exit();
@@ -29,7 +30,6 @@ class MainMenu {
 
     //Charger les images des maps
     for (int i =0; i < mapFiles.length; i++) {
-      println("Load map: " + mapFiles[i] + " and the image: " +  mapFiles[i].substring(0, (mapFiles[i].length() - 4)));
       _mapButton[i] = new MapButton((int)(width / 3.6), (int)(height / 8), loadImage("./map/img/" + mapFiles[i].substring(0, (mapFiles[i].length() - 4))+ ".png"),  mapFiles[i].substring(0, (mapFiles[i].length() - 4)));
     }
   }
@@ -43,6 +43,7 @@ class MainMenu {
   }
 
   void draw() {
+    image(home, 0, 0, 800, 600);
       for (int i =0; i < _mapButton.length; i++) {
         _mapButton[i].draw((int)((height / 30) + (i % 3) * (height / 2.3)), (int)((width / 2.6) + (int)(i / 3) * (width / 8)));
       }
